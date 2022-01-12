@@ -1,0 +1,539 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "AVD Solution Accelerator",
+            "steps": [
+                {
+                    "name": "Hostpool",
+                    "label": "Hostpool",
+                    "elements": [
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "location": {
+                                "resourceTypes": []
+                            }
+                        },			
+                        {
+                            "name": "avdResourceGroup",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Avd Resource Group",
+                            "defaultValue": "rg-prod-eus-avdresources",
+                            "toolTip": "Name of resource group to hold Templates, HostPools, Application Groups, and Workspaces",
+                            "constraints": {
+                                "required": false,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },						
+                        {
+                            "name": "hostPoolName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Host Pool Name",
+                            "defaultValue": "",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "hostPoolType",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Host Pool Type",
+                            "defaultValue": "Pooled",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "Pooled",
+                                        "value": "Pooled"
+                                    },
+                                    {
+                                        "label": "Personal",
+                                        "value": "Personal"
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "loadBalancer",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Load Balancer",
+                            "defaultValue": "DepthFirst",
+                            "toolTip": "Breadth-first load balancing distributes new user sessions across all available session hosts in the host pool. Depth-first load balancing distributes new user sessions to an available session host with the highest number of connections but has not reached its maximum session limit threshold.",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "BreadthFirst",
+                                        "value": "BreadthFirst"
+                                    },
+                                    {
+                                        "label": "DepthFirst",
+                                        "value": "DepthFirst"
+                                    }
+                                ]
+                            },
+                            "visible": "[equals(steps('Hostpool').hostPoolType, 'Pooled')]"
+                        },
+                        {
+                            "name": "maxSessions",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Max Sessions",
+                            "defaultValue": "4",
+                            "toolTip": "The maximum number of users that have concurrent sessions on a session host. When setting a host pool to have depth first load balancing or planning to use Autoscaling, you must set an appropriate max session limit according to the configuration of your deployment and capacity of your VMs.",
+                            "constraints": {
+                                "required": false,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": "[equals(steps('Hostpool').hostPoolType, 'Pooled')]"
+                        },                        
+                        {
+                            "name": "startVmOnConnect",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Start Vm On Connect",
+                            "defaultValue": "true",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "true",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "false",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "createVmRole",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Create Start VM on Connect Role",
+                            "defaultValue": "true",
+                            "toolTip": "Create custom Azure IAM role for Start VM on Connect",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "true",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "false",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": "[equals(steps('Hostpool').startVmOnConnect, true)]"
+                        },						
+                        {
+                            "name": "location",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Location",
+                            "defaultValue": "[[resourceGroup().location]",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": false
+                        },
+                        {
+                            "name": "time",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Time",
+                            "defaultValue": "[[utcNow()]",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": false
+                        }
+                    ]
+                },
+                {
+                    "name": "Images",
+                    "label": "Images to Build",
+                    "elements": [
+                        {
+                            "name": "managedIdentityName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Managed Identity Name",
+                            "defaultValue": "",
+                            "toolTip": "Name for managed identity used for Azure Image Builder",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "computeGalleryName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Compute Gallery Name",
+                            "defaultValue": "",
+                            "toolTip": "Name for Azure Compute Gallery",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },												
+                        {
+                            "name": "buildImages",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Images to Build",
+							"multiselect": true,
+    						"selectAll": true,
+							"defaultValue": "Select all",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "Win10 Enterprise 20H2",
+                                        "value": {
+											"name": "Windows10_20H2",
+											"osType": "Windows",
+											"osState": "Generalized",
+											"offer": "Windows-10",
+											"publisher": "MicrosoftWindowsDesktop",
+											"sku": "20h2-evd"
+										}
+                                    },
+                                    {
+                                        "label": "Win10 Enterprise 20H2 + M365",
+                                        "value": {
+											"name": "Windows10_20H2_Office",
+											"osType": "Windows",
+											"osState": "Generalized",
+											"offer": "office-365",
+											"publisher": "MicrosoftWindowsDesktop",
+											"sku": "20h2-evd-o365pp"
+										}
+									}
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "imageRegionReplicas",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Image Region Replicas",
+                            "defaultValue": "Select all",
+							"multiselect": true,
+    						"selectAll": true,
+							"filter": true,
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+								"allowedValues": [
+									{
+										"label": "Australia Central",
+										"value": "australiacentral"
+									},
+									{
+										"label": "Australia Central 2",
+										"value": "australiacentral2"
+									},
+									{
+										"label": "Australia East",
+										"value": "australiaeast"
+									},
+									{
+										"label": "Australia Southeast",
+										"value": "australiasoutheast"
+									},
+									{
+										"label": "Brazil South",
+										"value": "brazilsouth"
+									},
+									{
+										"label": "Brazil Southeast",
+										"value": "brazilsoutheast"
+									},
+									{
+										"label": "Canada Central",
+										"value": "canadacentral"
+									},
+									{
+										"label": "Canada East",
+										"value": "canadaeast"
+									},
+									{
+										"label": "Central India",
+										"value": "centralindia"
+									},
+									{
+										"label": "Central US",
+										"value": "centralus"
+									},
+									{
+										"label": "East Asia",
+										"value": "eastasia"
+									},
+									{
+										"label": "East US",
+										"value": "eastus"
+									},
+									{
+										"label": "East US 2",
+										"value": "eastus2"
+									},
+									{
+										"label": "France Central",
+										"value": "francecentral"
+									},
+									{
+										"label": "France South",
+										"value": "francesouth"
+									},
+									{
+										"label": "Germany North",
+										"value": "germanynorth"
+									},
+									{
+										"label": "Germany West Central",
+										"value": "germanywestcentral"
+									},
+									{
+										"label": "Japan East",
+										"value": "japaneast"
+									},
+									{
+										"label": "Japan West",
+										"value": "japanwest"
+									},
+									{
+										"label": "Korea Central",
+										"value": "koreacentral"
+									},
+									{
+										"label": "Korea South",
+										"value": "koreasouth"
+									},
+									{
+										"label": "North Central US",
+										"value": "northcentralus"
+									},
+									{
+										"label": "North Europe",
+										"value": "northeurope"
+									},
+									{
+										"label": "Norway East",
+										"value": "norwayeast"
+									},
+									{
+										"label": "Norway West",
+										"value": "norwaywest"
+									},
+									{
+										"label": "South Africa North",
+										"value": "southafricanorth"
+									},
+									{
+										"label": "South Africa West",
+										"value": "southafricawest"
+									},
+									{
+										"label": "South Central US",
+										"value": "southcentralus"
+									},
+									{
+										"label": "South India",
+										"value": "southindia"
+									},
+									{
+										"label": "Southeast Asia",
+										"value": "southeastasia"
+									},
+									{
+										"label": "Sweden Central",
+										"value": "swedencentral"
+									},
+									{
+										"label": "Switzerland North",
+										"value": "switzerlandnorth"
+									},
+									{
+										"label": "Switzerland West",
+										"value": "switzerlandwest"
+									},
+									{
+										"label": "UAE Central",
+										"value": "uaecentral"
+									},
+									{
+										"label": "UAE North",
+										"value": "uaenorth"
+									},
+									{
+										"label": "UK South",
+										"value": "uksouth"
+									},
+									{
+										"label": "UK West",
+										"value": "ukwest"
+									},
+									{
+										"label": "West Central US",
+										"value": "westcentralus"
+									},
+									{
+										"label": "West Europe",
+										"value": "westeurope"
+									},
+									{
+										"label": "West India",
+										"value": "westindia"
+									},
+									{
+										"label": "West US",
+										"value": "westus"
+									},
+									{
+										"label": "West US 2",
+										"value": "westus2"
+									},
+									{
+										"label": "West US 3",
+										"value": "westus3"
+									}
+									]
+
+                            },
+                            "visible": true
+                        }						
+                    ]
+                },				
+                {
+                    "name": "basics",
+                    "label": "Basics",
+                    "elements": [
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "location": {
+                                "resourceTypes": []
+                            }
+                        },
+                        {
+                            "name": "keyVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Key Vault Name",
+                            "defaultValue": "kv-prod-eus-avd",
+                            "toolTip": "Name of Key Vault used for AVD deployment secrets",
+                            "constraints": {
+                                "required": false,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "objectId",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Object Id",
+                            "defaultValue": "",
+                            "toolTip": "AAD object ID of security principal to grant Key Vault access",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "workspaceName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Workspace Name",
+                            "defaultValue": "poc",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "createAibRole",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Create Aib Role",
+                            "defaultValue": "true",
+                            "toolTip": "Create custom Azure Image Builder Role",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "true",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "false",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "time",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Time",
+                            "defaultValue": "[[utcNow()]",
+                            "toolTip": "Do not modify, used to set unique value for resource deployment",
+                            "constraints": {
+                                "required": false,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        }
+                    ]
+                }
+            ],
+            "deployment": {
+                "parameters": {
+                    "avdResourceGroup": "[steps('Hostpool').avdResourceGroup]",
+                    "managedIdentityName": "[steps('Images').managedIdentityName]",
+                    "keyVaultName": "[steps('basics').keyVaultName]",
+                    "objectId": "[steps('basics').objectId]",
+                    "workspaceName": "[steps('basics').workspaceName]",
+                    "hostPoolName": "[steps('Hostpool').hostPoolName]",
+                    "hostPoolType": "[steps('Hostpool').hostPoolType]",
+                    "computeGalleryName": "[steps('Images').computeGalleryName]",
+                    "imageRegionReplicas": "[steps('Images').imageRegionReplicas]",
+                    "createVmRole": "[steps('Hostpool').createVmRole]",
+                    "createAibRole": "[steps('basics').createAibRole]",
+                    "time": "[steps('basics').time]"
+                },
+                "kind": "Subscription",
+                "location": "[steps('basics').resourceScope.location.name]",
+                "subscriptionId": "[steps('basics').resourceScope.subscription.id]",
+                "template": {
+                    "file": "<ARM deployment template relative path>"
+                }
+            }
+        }
+    }
+}

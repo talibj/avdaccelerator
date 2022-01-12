@@ -3,11 +3,11 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Test Form View",
+            "title": "AVD Solution Accelerator",
             "steps": [
                 {
-                    "name": "basics",
-                    "label": "Basics",
+                    "name": "Hostpool",
+                    "label": "Hostpool",
                     "elements": [
                         {
                             "name": "resourceScope",
@@ -71,7 +71,7 @@
                                     }
                                 ]
                             },
-                            "visible": "[equals(steps('basics').hostPoolType, 'Pooled')]"
+                            "visible": "[equals(steps('Hostpool').hostPoolType, 'Pooled')]"
                         },
                         {
                             "name": "maxSessions",
@@ -84,7 +84,7 @@
                                 "regex": "",
                                 "validationMessage": ""
                             },
-                            "visible": "[equals(steps('basics').hostPoolType, 'Pooled')]"
+                            "visible": "[equals(steps('Hostpool').hostPoolType, 'Pooled')]"
                         },                        
                         {
                             "name": "startVmOnConnect",
@@ -138,16 +138,16 @@
             ],
             "deployment": {
                 "parameters": {
-                    "hostPoolName": "[steps('basics').hostPoolName]",
-                    "hostPoolType": "[steps('basics').hostPoolType]",
-                    "loadBalancer": "[steps('basics').loadBalancer]",
-                    "startVmOnConnect": "[steps('basics').startVmOnConnect]",
-                    "location": "[steps('basics').location]",
-                    "time": "[steps('basics').time]"
+                    "hostPoolName": "[steps('Hostpool').hostPoolName]",
+                    "hostPoolType": "[steps('Hostpool').hostPoolType]",
+                    "loadBalancer": "[steps('Hostpool').loadBalancer]",
+                    "startVmOnConnect": "[steps('Hostpool').startVmOnConnect]",
+                    "location": "[steps('Hostpool').location]",
+                    "time": "[steps('Hostpool').time]"
                 },
                 "kind": "ResourceGroup",
-                "location": "[steps('basics').resourceScope.location.name]",
-                "resourceGroupId": "[steps('basics').resourceScope.resourceGroup.id]",
+                "location": "[steps('Hostpool').resourceScope.location.name]",
+                "resourceGroupId": "[steps('Hostpool').resourceScope.resourceGroup.id]",
                 "template": {
                     "file": "<ARM deployment template relative path>"
                 }
