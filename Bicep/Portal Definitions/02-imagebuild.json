@@ -1,0 +1,381 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "AVD Image Build Solution Accelerator",
+            "steps": [
+                {
+                    "name": "Images",
+                    "label": "Images to Build",
+                    "elements": [
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "location": {
+                                "resourceTypes": []
+                            }
+                        },                        
+                        {
+                            "name": "managedIdentityName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Managed Identity Name",
+                            "defaultValue": "",
+                            "toolTip": "Name for managed identity used for Azure Image Builder",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "createAibRole",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Create Aib Role",
+                            "defaultValue": "true",
+                            "toolTip": "Create custom Azure Image Builder Role",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "true",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "false",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "computeGalleryName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Compute Gallery Name",
+                            "defaultValue": "",
+                            "toolTip": "Name for Azure Compute Gallery",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "buildImages",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Images to Build",
+                            "multiselect": true,
+                            "selectAll": true,
+                            "defaultValue": "Select all",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "Win10 Enterprise 20H2",
+                                        "value": {
+                                            "name": "Windows10_20H2",
+                                            "osType": "Windows",
+                                            "osState": "Generalized",
+                                            "offer": "Windows-10",
+                                            "publisher": "MicrosoftWindowsDesktop",
+                                            "sku": "20h2-evd"
+                                        }
+                                    },
+                                    {
+                                        "label": "Win10 Enterprise 20H2 + M365",
+                                        "value": {
+                                            "name": "Windows10_20H2_Office",
+                                            "osType": "Windows",
+                                            "osState": "Generalized",
+                                            "offer": "office-365",
+                                            "publisher": "MicrosoftWindowsDesktop",
+                                            "sku": "20h2-evd-o365pp"
+                                        }
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "imageCustomization",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Image Customizations",
+                            "multiselect": true,
+                            "selectAll": true,
+                            "defaultValue": "Select all",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "Enable RDP Shortpath",
+                                        "value": {
+                                            "name": "TBD"
+                                        }
+                                    },
+                                    {
+                                        "label": "Disable Automatic Updates",
+                                        "value": {
+                                            "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU' /v NoAutoUpdate /t REG_DWORD /d 1 /f"
+                                        }
+                                    },
+                                    {
+                                        "label": "Time Zone Redirection",
+                                        "value": {
+                                            "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services' /v fEnableTimeZoneRedirection /t REG_DWORD /d 1 /f"
+                                        }
+                                    },
+                                    {
+                                        "label": "Disable Storage Sense",
+                                        "value": {
+                                            "name": "reg add 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy' /v 01 /t REG_DWORD /d 0 /f"
+                                        }
+                                    }									
+                                ]
+                            },
+                            "visible": true
+                        },						
+                        {
+                            "name": "imageRegionReplicas",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Image Region Replicas",
+                            "defaultValue": "Select all",
+                            "multiselect": true,
+                            "selectAll": true,
+                            "filter": true,
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "Australia Central",
+                                        "value": "australiacentral"
+                                    },
+                                    {
+                                        "label": "Australia Central 2",
+                                        "value": "australiacentral2"
+                                    },
+                                    {
+                                        "label": "Australia East",
+                                        "value": "australiaeast"
+                                    },
+                                    {
+                                        "label": "Australia Southeast",
+                                        "value": "australiasoutheast"
+                                    },
+                                    {
+                                        "label": "Brazil South",
+                                        "value": "brazilsouth"
+                                    },
+                                    {
+                                        "label": "Brazil Southeast",
+                                        "value": "brazilsoutheast"
+                                    },
+                                    {
+                                        "label": "Canada Central",
+                                        "value": "canadacentral"
+                                    },
+                                    {
+                                        "label": "Canada East",
+                                        "value": "canadaeast"
+                                    },
+                                    {
+                                        "label": "Central India",
+                                        "value": "centralindia"
+                                    },
+                                    {
+                                        "label": "Central US",
+                                        "value": "centralus"
+                                    },
+                                    {
+                                        "label": "East Asia",
+                                        "value": "eastasia"
+                                    },
+                                    {
+                                        "label": "East US",
+                                        "value": "eastus"
+                                    },
+                                    {
+                                        "label": "East US 2",
+                                        "value": "eastus2"
+                                    },
+                                    {
+                                        "label": "France Central",
+                                        "value": "francecentral"
+                                    },
+                                    {
+                                        "label": "France South",
+                                        "value": "francesouth"
+                                    },
+                                    {
+                                        "label": "Germany North",
+                                        "value": "germanynorth"
+                                    },
+                                    {
+                                        "label": "Germany West Central",
+                                        "value": "germanywestcentral"
+                                    },
+                                    {
+                                        "label": "Japan East",
+                                        "value": "japaneast"
+                                    },
+                                    {
+                                        "label": "Japan West",
+                                        "value": "japanwest"
+                                    },
+                                    {
+                                        "label": "Korea Central",
+                                        "value": "koreacentral"
+                                    },
+                                    {
+                                        "label": "Korea South",
+                                        "value": "koreasouth"
+                                    },
+                                    {
+                                        "label": "North Central US",
+                                        "value": "northcentralus"
+                                    },
+                                    {
+                                        "label": "North Europe",
+                                        "value": "northeurope"
+                                    },
+                                    {
+                                        "label": "Norway East",
+                                        "value": "norwayeast"
+                                    },
+                                    {
+                                        "label": "Norway West",
+                                        "value": "norwaywest"
+                                    },
+                                    {
+                                        "label": "South Africa North",
+                                        "value": "southafricanorth"
+                                    },
+                                    {
+                                        "label": "South Africa West",
+                                        "value": "southafricawest"
+                                    },
+                                    {
+                                        "label": "South Central US",
+                                        "value": "southcentralus"
+                                    },
+                                    {
+                                        "label": "South India",
+                                        "value": "southindia"
+                                    },
+                                    {
+                                        "label": "Southeast Asia",
+                                        "value": "southeastasia"
+                                    },
+                                    {
+                                        "label": "Sweden Central",
+                                        "value": "swedencentral"
+                                    },
+                                    {
+                                        "label": "Switzerland North",
+                                        "value": "switzerlandnorth"
+                                    },
+                                    {
+                                        "label": "Switzerland West",
+                                        "value": "switzerlandwest"
+                                    },
+                                    {
+                                        "label": "UAE Central",
+                                        "value": "uaecentral"
+                                    },
+                                    {
+                                        "label": "UAE North",
+                                        "value": "uaenorth"
+                                    },
+                                    {
+                                        "label": "UK South",
+                                        "value": "uksouth"
+                                    },
+                                    {
+                                        "label": "UK West",
+                                        "value": "ukwest"
+                                    },
+                                    {
+                                        "label": "West Central US",
+                                        "value": "westcentralus"
+                                    },
+                                    {
+                                        "label": "West Europe",
+                                        "value": "westeurope"
+                                    },
+                                    {
+                                        "label": "West India",
+                                        "value": "westindia"
+                                    },
+                                    {
+                                        "label": "West US",
+                                        "value": "westus"
+                                    },
+                                    {
+                                        "label": "West US 2",
+                                        "value": "westus2"
+                                    },
+                                    {
+                                        "label": "West US 3",
+                                        "value": "westus3"
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "installSSL",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Install SSL Certificate in Image",
+                            "defaultValue": "false",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "true",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "false",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "keyVaultCertificateSelection",
+                            "type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
+                            "visible": "[equals(steps('Images').installSSL, true)]",
+                            "toolTip": "Select certificate",
+                            "label": "Key Vault certificates selection"
+                        }                       
+                    ]
+                }							
+
+            ],
+            "deployment": {
+                "parameters": {
+                    "avdResourceGroup": "[steps('Images').resourceScope.resourceGroup.name]",
+                    "managedIdentityName": "[steps('Images').managedIdentityName]",
+                    "computeGalleryName": "[steps('Images').computeGalleryName]",
+                    "imageRegionReplicas": "[steps('Images').imageRegionReplicas]",
+                    "createAibRole": "[steps('Images').createAibRole]"
+                },
+                "kind": "ResourceGroup",
+                "template": {
+                    "file": "<ARM deployment template relative path>"
+                },
+                "_dxContentPath": "view.properties.deployment"
+            },
+            "_dxContentPath": "view.properties"
+        },
+        "_dxContentPath": "view"
+    }
+}
+
