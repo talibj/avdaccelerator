@@ -3,11 +3,11 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "AVD Solution Accelerator",
+            "title": "AVD Solution Accelerator Landing Zone",
             "steps": [
                 {
-                    "name": "Hostpool",
-                    "label": "Hostpool",
+                    "name": "AVDLandingZone",
+                    "label": "AVD Landing Zone",
                     "elements": [
                         {
                             "name": "resourceScope",
@@ -29,6 +29,53 @@
                             },
                             "visible": false
                         },
+                        {
+                            "name": "workspacePrompt",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "New or Existing Workspace for Hostpool",
+                            "defaultValue": "New",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "New",
+                                        "value": "New"
+                                    },
+                                    {
+                                        "label": "Existing",
+                                        "value": "Existing"
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },						
+                        {
+                            "name": "workspaceName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Workspace Name",
+                            "defaultValue": "poc",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": "[equals(steps('AVDLandingZone').workspacePrompt, 'New')]"
+                        },
+						{
+							"name": "existingWorkspace",
+							"type": "Microsoft.Solutions.ResourceSelector",
+							"label": "Select existing AVD workspace",
+							"resourceType": "Microsoft.DesktopVirtualization/workspaces",
+							"options": {
+								"filter": {
+									"subscription": "onBasics",
+									"location": "onBasics"
+								}
+							},
+							"visible": "[equals(steps('AVDLandingZone').workspacePrompt, 'Existing')]"
+						},								
                         {
                             "name": "hostPoolName",
                             "type": "Microsoft.Common.TextBox",
@@ -82,7 +129,7 @@
                                     }
                                 ]
                             },
-                            "visible": "[equals(steps('Hostpool').hostPoolType, 'Pooled')]"
+                            "visible": "[equals(steps('AVDLandingZone').hostPoolType, 'Pooled')]"
                         },
                         {
                             "name": "maxSessions",
@@ -95,8 +142,8 @@
                                 "regex": "",
                                 "validationMessage": ""
                             },
-                            "visible": "[equals(steps('Hostpool').hostPoolType, 'Pooled')]"
-                        },
+                            "visible": "[equals(steps('AVDLandingZone').hostPoolType, 'Pooled')]"
+                        },										
                         {
                             "name": "startVmOnConnect",
                             "type": "Microsoft.Common.DropDown",
@@ -137,7 +184,7 @@
                                     }
                                 ]
                             },
-                            "visible": "[equals(steps('Hostpool').startVmOnConnect, true)]"
+                            "visible": "[equals(steps('AVDLandingZone').startVmOnConnect, true)]"
                         },
                         {
                             "name": "location",
@@ -504,19 +551,6 @@
                             "visible": true
                         },
                         {
-                            "name": "workspaceName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Workspace Name",
-                            "defaultValue": "poc",
-                            "toolTip": "",
-                            "constraints": {
-                                "required": false,
-                                "regex": "",
-                                "validationMessage": ""
-                            },
-                            "visible": true
-                        },
-                        {
                             "name": "time",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Time",
@@ -534,7 +568,18 @@
             ],
             "deployment": {
                 "parameters": {
-                    "_dxContentPath": "view.properties.deployment.parameters"
+                    "avdResourceGroup": "[steps('AVDLandingZone').avdResourceGroup]",
+                    "managedIdentityName": "[steps('Images').managedIdentityName]",
+                    "keyVaultName": "[steps('basics').keyVaultName]",
+                    "objectId": "[steps('basics').objectId]",
+                    "workspaceName": "[steps('AVDLandingZone').workspaceName]",
+                    "hostPoolName": "[steps('AVDLandingZone').hostPoolName]",
+                    "hostPoolType": "[steps('AVDLandingZone').hostPoolType]",
+                    "computeGalleryName": "[steps('Images').computeGalleryName]",
+                    "imageRegionReplicas": "[steps('Images').imageRegionReplicas]",
+                    "createVmRole": "[steps('AVDLandingZone').createVmRole]",
+                    "createAibRole": "[steps('Images').createAibRole]",
+                    "time": "[steps('basics').time]"
                 },
                 "kind": "ResourceGroup",
                 "template": {
