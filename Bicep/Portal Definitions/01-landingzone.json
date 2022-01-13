@@ -203,7 +203,96 @@
                             "visible": false
                         }
                     ]
-                }
+                },
+
+                {
+                    "name": "AVDNetwork",
+                    "label": "AVD Network",
+                    "elements": [
+						{
+						"name": "avdVNet",
+						"type": "Microsoft.Network.VirtualNetworkCombo",
+						"label": {
+							"virtualNetwork": "Virtual network",
+							"subnets": "Subnets"
+						},
+						"toolTip": {
+							"virtualNetwork": "",
+							"subnets": ""
+						},
+						"defaultValue": {
+							"name": "vnet-avd",
+							"addressPrefixSize": "/24"
+						},
+						"constraints": {
+							"minAddressPrefixSize": "/27"
+						},
+						"options": {
+							"hideExisting": false
+						},
+						"subnets": {
+							"subnet1": {
+							"label": "Subnet",
+							"defaultValue": {
+								"name": "subnet-avd",
+								"addressPrefixSize": "/24"
+							},
+							"constraints": {
+								"minAddressPrefixSize": "/27",
+								"minAddressCount": 12,
+								"requireContiguousAddresses": true
+							}
+							}
+						},
+						"visible": true
+						},
+                        {
+                            "name": "createProfileStorage",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "User Profile Storage",
+                            "defaultValue": "false",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "true",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "false",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+						{
+								"name": "fslogixStorage",
+								"type": "Microsoft.Storage.StorageAccountSelector",
+								"label": "Storage account",
+								"toolTip": "",
+								"defaultValue": {
+									"name": "fsl",
+									"type": "Premium_LRS",
+									"kind": "storageV2"
+								},
+								"constraints": {
+									"allowedTypes": [
+										"Premium_LRS"
+									],
+									"allowedKind": [
+										"StorageV2"
+									]
+								},
+								"options": {
+									"hideExisting": false
+								},
+								"visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
+            			}					
+					]
+                }								
+
             ],
             "deployment": {
                 "parameters": {
