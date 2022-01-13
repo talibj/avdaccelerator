@@ -112,27 +112,40 @@
                                 "required": true,
                                 "allowedValues": [
                                     {
-                                        "label": "Enable RDP Shortpath",
+                                        "label": "RDP Shortpath",
                                         "value": {
-                                            "name": "TBD"
+                                            "name": "New-NetFirewallRule -DisplayName 'Remote Desktop - Shortpath (UDP-In)'  -Action Allow -Description 'Inbound rule for the Remote Desktop service to allow RDP traffic. [UDP 3390]' -Group '@FirewallAPI.dll,-28752' -Name 'RemoteDesktop-UserMode-In-Shortpath-UDP'  -PolicyStore PersistentStore -Profile Domain, Private -Service TermService -Protocol udp -LocalPort 3390 -Program '%SystemRoot%\\system32\\svchost.exe' -Enabled:True",
+											"scriptType": "uri",
+											"scriptLocation": "https://aka.ms/avdgpo"
                                         }
                                     },
                                     {
+                                        "label": "Screen Capture Protection",
+                                        "value": {
+                                            "name": "New-NetFirewallRule -DisplayName 'Remote Desktop - Shortpath (UDP-In)'  -Action Allow -Description 'Inbound rule for the Remote Desktop service to allow RDP traffic. [UDP 3390]' -Group '@FirewallAPI.dll,-28752' -Name 'RemoteDesktop-UserMode-In-Shortpath-UDP'  -PolicyStore PersistentStore -Profile Domain, Private -Service TermService -Protocol udp -LocalPort 3390 -Program '%SystemRoot%\\system32\\svchost.exe' -Enabled:True",
+											"scriptType": "uri",
+											"scriptLocation": "https://aka.ms/avdgpo"
+                                        }
+                                    },									
+                                    {
                                         "label": "Disable Automatic Updates",
                                         "value": {
-                                            "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU' /v NoAutoUpdate /t REG_DWORD /d 1 /f"
+                                            "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU' /v NoAutoUpdate /t REG_DWORD /d 1 /f",
+											"scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Time Zone Redirection",
                                         "value": {
-                                            "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services' /v fEnableTimeZoneRedirection /t REG_DWORD /d 1 /f"
+                                            "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services' /v fEnableTimeZoneRedirection /t REG_DWORD /d 1 /f",
+											"scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Disable Storage Sense",
                                         "value": {
-                                            "name": "reg add 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy' /v 01 /t REG_DWORD /d 0 /f"
+                                            "name": "reg add 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy' /v 01 /t REG_DWORD /d 0 /f",
+											"scriptType": "inline"
                                         }
                                     }									
                                 ]
