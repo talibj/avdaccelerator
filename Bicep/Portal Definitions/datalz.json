@@ -231,7 +231,25 @@
                             "name": "resourceScope",
                             "type": "Microsoft.Common.ResourceScope",
                             "location": {
-                                "resourceTypes": []
+                                "label": "Region",
+                                "toolTip": "Azure region",
+                                "resourceTypes": [],
+                                "allowedValues": [
+									"eastus",
+									"eastus2",
+									"westcentralus",
+									"westus",
+									"westus2",
+									"westus3",
+									"southcentralus",
+									"northeurope",
+									"westeurope",
+									"southeastasia",
+									"australiasoutheast",
+									"australiaeast",
+									"uksouth",
+									"ukwest"
+                                ]
                             }
                         },							
                         {
