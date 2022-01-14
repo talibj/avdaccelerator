@@ -1,6 +1,6 @@
 # Project
 
-### Test
+### Test UI
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Favdaccelerator%2Fem-customui%2F01-avd-framework.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Favdaccelerator%2Fem-customui%2FPortalDefinitions%2F01-landingzone.json)
 
