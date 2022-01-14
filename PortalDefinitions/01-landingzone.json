@@ -318,7 +318,7 @@
                 }								
 
             ],
-            "deployment": {
+            "outputs": {
                 "parameters": {
                     "avdResourceGroup": "[steps('AVDLandingZone').resourceScope.resourceGroup.name]",
                     "workspaceName": "[steps('AVDLandingZone').workspaceSection.workspaceName]",
@@ -327,14 +327,8 @@
                     "createVmRole": "[steps('AVDLandingZone').createVmRole]",
 					"location": "[steps('AVDLandingZone').location]"
                 },
-                "kind": "ResourceGroup",
-                "template": {
-                    "file": "<ARM deployment template relative path>"
-                },
-                "_dxContentPath": "view.properties.deployment"
-            },
-            "_dxContentPath": "view.properties"
-        },
-        "_dxContentPath": "view"
+                "kind": "ResourceGroup"
+            }
+        }
     }
 }
