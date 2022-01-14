@@ -317,18 +317,18 @@
 					]
                 }								
 
-            ],
-            "outputs": {
-                "parameters": {
-                    "avdResourceGroup": "[steps('AVDLandingZone').resourceScope.resourceGroup.name]",
-                    "workspaceName": "[steps('AVDLandingZone').workspaceSection.workspaceName]",
-                    "hostPoolName": "[steps('AVDLandingZone').hostPoolSection.hostPoolName]",
-                    "hostPoolType": "[steps('AVDLandingZone').hostPoolSection.hostPoolType]",
-                    "createVmRole": "[steps('AVDLandingZone').createVmRole]",
-					"location": "[steps('AVDLandingZone').location]"
-                },
-                "kind": "ResourceGroup"
-            }
+            ]
+        },
+        "outputs": {
+            "parameters": {
+                "avdResourceGroup": "[steps('AVDLandingZone').resourceScope.resourceGroup.name]",
+                "workspaceName": "[steps('AVDLandingZone').workspaceSection.workspaceName]",
+                "hostPoolName": "[steps('AVDLandingZone').hostPoolSection.hostPoolName]",
+                "hostPoolType": "[steps('AVDLandingZone').hostPoolSection.hostPoolType]",
+                "createVmRole": "[steps('AVDLandingZone').createVmRole]",
+                "location": "[steps('AVDLandingZone').location]"
+            },
+            "kind": "ResourceGroup"
         }
     }
 }
