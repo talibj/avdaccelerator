@@ -23,10 +23,6 @@
                             "type":"Microsoft.Common.SubscriptionSelector",
                             "name": "avdSub",
                             "label": "AVD subscription"
-                        },
-                        {
-                            "name": "resourceScope",
-                            "type": "Microsoft.Common.Region"
                         }
                     ]
                 },
