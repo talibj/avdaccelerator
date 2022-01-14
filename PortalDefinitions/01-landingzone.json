@@ -333,16 +333,26 @@
                                 "allowedValues": [
                                     {
                                         "label": "Yes (Recommended)",
-                                        "value": "true"
+                                        "value": true
                                     },
                                     {
                                         "label": "No",
-                                        "value": "false"
+                                        "value": false
                                     }
                                 ]
                             },
 							"visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
-						}													
+						},
+                        {
+                            "name": "backupWarning",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": "[equals(steps('AVDNetwork').fileBackup, false)]",
+                            "options": {
+                                "text": "It is strongly advised to backup user profile data. Backups protect against corruption, accidental deletion, and ransomware.",
+                                "uri": "https://docs.microsoft.com/en-us/azure/backup/azure-file-share-backup-overview",
+                                "style": "Warning"
+                            }
+                        }                        													
 					]
                 },
                 {
