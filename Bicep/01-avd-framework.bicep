@@ -66,17 +66,6 @@ resource avdRg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 // ----------------------------------------
 // Resource Deployments
 
-module keyvault 'Modules/keyvault.bicep' = {
-  scope: avdRg
-  name: 'avdkv-${time}'
-  params: {
-    keyVaultName: keyVaultName
-    objectId: objectId
-    enabledForDiskEncryption: true
-    enabledForTemplateDeployment: true
-    principalType: 'User'
-  }
-}
 module workspace 'Modules/workspace.bicep' = {
   scope: avdRg
   name: 'ws${workspaceName}-${time}'
@@ -202,7 +191,7 @@ module imageBuildDefinitions 'Modules/image-template.bicep' = [for i in range(0,
     imageRegions: imageRegionReplicas
     managedIdentityId: imageBuilderIdentity.outputs.identityResourceId
     scriptUri: vdiOptimizeScript.outputs.scriptUri
-    keyVaultName: keyvault.outputs.keyVaultName
+    keyVaultName: 'test'
   }
 }]
 module buildImages 'Modules/start-image-build.bicep' = [for i in range(0, length(vdiImages)): {
