@@ -6,8 +6,8 @@
             "title": "AVD Image Build Solution Accelerator",
             "steps": [
                 {
-                    "name": "Images",
-                    "label": "Images to Build",
+                    "name": "basics",
+                    "label": "Azure Image Builder",
                     "elements": [
                         {
                             "name": "resourceScope",
@@ -15,7 +15,7 @@
                             "location": {
                                 "resourceTypes": []
                             }
-                        },                        
+                        },
                         {
                             "name": "managedIdentityName",
                             "type": "Microsoft.Common.TextBox",
@@ -41,10 +41,10 @@
                                 "validationMessage": ""
                             },
                             "visible": true
-                        },						
-						                        {
+                        },
+						{
                             "name": "aibVnetInject",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.OptionsGroup",
                             "label": "Use existing VNet for Azure Image Builder",
                             "defaultValue": "false",
                             "toolTip": "",
@@ -64,18 +64,43 @@
                             "visible": true
                         },
 						{
+							"name": "locationsApi",
+							"type": "Microsoft.Solutions.ArmApiControl",
+							"request": {
+								"method": "GET",
+								"path": "locations?api-version=2019-11-01"
+							}
+						},
+						{
+							"name": "locationName",
+							"label": "Location",
+							"type": "Microsoft.Common.DropDown",
+							"visible": "[equals(steps('basics').aibVnetInject, true)]",
+							"defaultValue": "",
+							"toolTip": "Select the Location for Azure Image Builder.",
+							"multiselect": false,
+							"selectAll": false,
+							"filter": true,
+							"filterPlaceholder": "Filter items ...",
+							"multiLine": true,
+							"constraints": {
+								"allowedValues": "[map(filter(steps('basics').locationsApi.value,(item) => contains(split('eastus, eastus2,westcentralus,westus,westus2,westus3,southcentralus,northeurope,westeurope,southeastasia,australiasoutheast,australiaeast,uksouth,ukwest', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
+								"required": true
+							}
+						},						
+						{
 							"name": "virtualNetworkApi",
 							"type": "Microsoft.Solutions.ArmApiControl",
 							"request": {
 								"method": "GET",
-								"path": "[concat(steps('Images').resourceScope.subscriptionId, '/providers/Microsoft.Network/virtualNetworks?api-version=2020-11-01')]"
+								"path": "Microsoft.Network/virtualNetworks?api-version=2020-11-01"
 							}
 						},					
 						{
 							"name": "virtualNetworkId",
 							"label": "Virtual Network",
 							"type": "Microsoft.Common.DropDown",
-							"visible": true,
+							"visible": "[equals(steps('basics').aibVnetInject, true)]",
 							"defaultValue": "",
 							"toolTip": "Select the Virtual Network for your Data Product.",
 							"multiselect": false,
@@ -84,48 +109,43 @@
 							"filterPlaceholder": "Filter items ...",
 							"multiLine": true,
 							"constraints": {
-								"allowedValues": "[map(filter(steps('Images').virtualNetworkApi.value,(item) => equals(item.location, steps('Images').resourceScope.location)),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+								"allowedValues": "[map(filter(steps('basics').virtualNetworkApi.value,(item) => equals(item.location, steps('basics').location)),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
 								"required": true
 							}
-						},						
+						},
 						{
-						"name": "aibVnet",
-						"type": "Microsoft.Network.VirtualNetworkCombo",
-						"label": {
-							"virtualNetwork": "Virtual Network for AIB",
-							"subnets": "Subnets"
+							"name": "subnetApi",
+							"type": "Microsoft.Solutions.ArmApiControl",
+							"request": {
+								"method": "GET",
+								"path": "[concat(steps('basics').virtualNetworkId, '/subnets?api-version=2020-11-01')]"
+							}
 						},
-						"toolTip": {
-							"virtualNetwork": "Virtual network where AIB will run during VM builds.",
-							"subnets": ""
-						},
-						"defaultValue": {
-							"name": "avd-vnet",
-							"addressPrefixSize": "/24"
-						},
-						"constraints": {
-							"minAddressPrefixSize": "/27"
-						},
-						"options": {
-							"hideExisting": false
-						},
-						"subnets": {
-							"subnet1": {
+						{
+							"name": "subnetId",
 							"label": "Subnet",
-							"defaultValue": {
-								"name": "subnet-1",
-								"addressPrefixSize": "/24"
-							},
+							"type": "Microsoft.Common.DropDown",
+							"visible": "[equals(steps('basics').aibVnetInject, true)]",
+							"defaultValue": "",
+							"toolTip": "Select the Subnet for your Data Product. The subnet must have 'privateEndpointNetworkPolicies' and 'privateLinkServiceNetworkPolicies' set to disabled.",
+							"multiselect": false,
+							"selectAll": false,
+							"filter": true,
+							"filterPlaceholder": "Filter items ...",
+							"multiLine": true,
 							"constraints": {
-								"minAddressPrefixSize": "/27",
-								"minAddressCount": 12,
-								"requireContiguousAddresses": true
+								"allowedValues": "[map(filter(steps('basics').subnetApi.value,(item) => and(equals(item.properties.privateEndpointNetworkPolicies, 'Disabled'), equals(item.properties.privateLinkServiceNetworkPolicies, 'Disabled'), lessOrEquals(int(last(split(item.properties.addressPrefix, '/'))), 27))),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+								"required": true
 							}
-							}
-						},
-						"visible": "[equals(steps('Images').aibVnetInject, true)]"
-						},						
-
+						}																		
+                    ]
+                },				
+                {
+                    "name": "Images",
+                    "label": "Image Customization",
+                    "elements": [
+												
+							
                         {
                             "name": "buildImages",
                             "type": "Microsoft.Common.DropDown",
@@ -424,22 +444,20 @@
                             },
                             "visible": true
                         },
-                        {
-                            "name": "keyVaultCertificateSelection",
-                            "type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
-                            "visible": "[equals(steps('Images').installSSL, true)]",
-                            "toolTip": "Select certificate",
-                            "label": "Key Vault certificates selection"
-                        }                       
+						{
+						"name": "keyVaultCertificateSelection",
+						"type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
+						"visible": "[equals(steps('Images').installSSL, true)]",
+						"toolTip": "Select certificate",
+						"label": "KeyVault certificates selection"
+						}						
                     ]
                 }							
-
             ],
             "deployment": {
                 "parameters": {
-                    "avdResourceGroup": "[steps('Images').resourceScope.resourceGroup.name]",
-                    "managedIdentityName": "[steps('Images').managedIdentityName]",
-                    "computeGalleryName": "[steps('Images').computeGalleryName]",
+                    "managedIdentityName": "[steps('basics').managedIdentityName]",
+                    "computeGalleryName": "[steps('basics').computeGalleryName]",
                     "imageRegionReplicas": "[steps('Images').imageRegionReplicas]"
                 },
                 "kind": "ResourceGroup",
@@ -454,3 +472,4 @@
     }
 }
 
+dates

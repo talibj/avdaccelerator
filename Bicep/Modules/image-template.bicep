@@ -43,7 +43,8 @@ var installSSLcert = [
   '$uri = $vaultUrl + "/certificates/" + $certName + "?api-version=2016-10-01"'
   '$cert = Invoke-RestMethod -Uri $uri -Method GET -Headers @{Authorization="Bearer $KeyVaultToken"}'
   '$cert.cer | New-Item -Type File -Name $certName.cer -Path $localPath'
-  'Import-Certificate -FilePath $localPath\\$certName.cer -CertStoreLocation Cert:\\LocalMachine\\Root\\'  
+  'Import-Certificate -FilePath $localPath\\$certName.cer -CertStoreLocation Cert:\\LocalMachine\\Root\\'
+  'Remove-Item -Name $certName.cer -path $localPath -Force'  
 ]
 
 var doNothing = [
@@ -78,6 +79,15 @@ resource aib 'Microsoft.VirtualMachineImages/imageTemplates@2021-10-01' = {
       }
       {
         type: 'PowerShell'
+        runElevated: true
+        runAsSystem: true
+        name: 'DeprovisioningScript'
+        inline: [
+          '((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace \'Sysprep.exe /oobe /generalize /quiet /quit\',\'Sysprep.exe /oobe /generalize /quit /mode:vm\') | Set-Content -Path C:\\DeprovisioningScript.ps1'
+         ]
+      }      
+      {
+        type: 'PowerShell'
         name: 'Install and Configure'
         runElevated: true
         runAsSystem: true
@@ -87,15 +97,6 @@ resource aib 'Microsoft.VirtualMachineImages/imageTemplates@2021-10-01' = {
         type: 'WindowsRestart'
         restartCheckCommand: 'write-host \'Restarting after tuning script\''
         restartTimeout: '5m'
-    }
-      {
-        type: 'PowerShell'
-        runElevated: true
-        runAsSystem: true
-        name: 'DeprovisioningScript'
-        inline: [
-          '((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace \'Sysprep.exe /oobe /generalize /quiet /quit\',\'Sysprep.exe /oobe /generalize /quit /mode:vm\') | Set-Content -Path C:\\DeprovisioningScript.ps1'
-         ]
       }
       {
         type: 'WindowsUpdate'
