@@ -197,19 +197,6 @@
                                     ]
                                 },
                                 "visible": "[equals(steps('AVDLandingZone').startVmOnConnect, true)]"
-                            },
-                            {
-                                "name": "location",
-                                "type": "Microsoft.Common.TextBox",
-                                "label": "Location",
-                                "defaultValue": "[[resourceGroup().location]",
-                                "toolTip": "",
-                                "constraints": {
-                                    "required": false,
-                                    "regex": "",
-                                    "validationMessage": ""
-                                },
-                                "visible": false
                             }
                     ]
                 },
@@ -220,46 +207,47 @@
                     "visible": true,
                     "elements": [
 						{
-						"name": "avdVNet",
-						"type": "Microsoft.Network.VirtualNetworkCombo",
-						"label": {
-							"virtualNetwork": "Virtual network",
-							"subnets": "Subnets"
-						},
-						"toolTip": {
-							"virtualNetwork": "",
-							"subnets": ""
-						},
-						"defaultValue": {
-							"name": "vnet-avd",
-							"addressPrefixSize": "/24"
-						},
-						"constraints": {
-							"minAddressPrefixSize": "/27"
-						},
-						"options": {
-							"hideExisting": false
-						},
-						"subnets": {
-							"subnet1": {
-							"label": "Subnet",
-							"defaultValue": {
-								"name": "subnet-avd",
-								"addressPrefixSize": "/24"
-							},
-							"constraints": {
-								"minAddressPrefixSize": "/27",
-								"minAddressCount": 12,
-								"requireContiguousAddresses": true
-							}
-							}
-						},
-						"visible": true
+                            "name": "avdVNet",
+                            "type": "Microsoft.Network.VirtualNetworkCombo",
+                            "visible": true,
+                            "label": {
+                                "virtualNetwork": "Virtual network",
+                                "subnets": "Subnets"
+                            },
+                            "toolTip": {
+                                "virtualNetwork": "",
+                                "subnets": ""
+                            },
+                            "defaultValue": {
+                                "name": "vnet-avd",
+                                "addressPrefixSize": "/24"
+                            },
+                            "constraints": {
+                                "minAddressPrefixSize": "/27"
+                            },
+                            "options": {
+                                "hideExisting": false
+                            },
+                            "subnets": {
+                                "subnet1": {
+                                "label": "Subnet",
+                                "defaultValue": {
+                                    "name": "subnet-avd",
+                                    "addressPrefixSize": "/24"
+                                },
+                                "constraints": {
+                                    "minAddressPrefixSize": "/27",
+                                    "minAddressCount": 12,
+                                    "requireContiguousAddresses": true
+                                }
+                                }
+                            }
 						},
                         {
                             "name": "createProfileStorage",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create User Profile Storage",
+                            "visible": true,
                             "defaultValue": "Yes (Recommended)",
                             "toolTip": "",
                             "constraints": {
@@ -274,8 +262,7 @@
                                         "value": false
                                     }
                                 ]
-                            },
-                            "visible": true
+                            }
                         },
 						{
 							"name": "fslogixStorage",
@@ -329,7 +316,7 @@
                 "avdVNet": "[steps('AVDNetwork').avdVNet]",
                 "fslogixStorage": "[steps('AVDNetwork').fslogixStorage]",
                 "fileBackup": "[steps('AVDNetwork').fileBackup]",
-                "location": "[steps('AVDLandingZone').location]"
+                "location": "[steps('basics').resourceScope.location.name]"
             },
             "kind": "ResourceGroup"
         }
