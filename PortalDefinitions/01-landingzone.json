@@ -153,9 +153,7 @@
                                     ]
                                 },
                                 "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Personal')]"
-                            }
-                        ]
-                        },																													
+                            },
                             {
                                 "name": "startVmOnConnect",
                                 "type": "Microsoft.Common.OptionsGroup",
@@ -196,8 +194,10 @@
                                         }
                                     ]
                                 },
-                                "visible": "[equals(steps('AVDLandingZone').startVmOnConnect, true)]"
-                            }
+                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.startVmOnConnect, true)]"
+                            }                            
+                        ]
+                        }
                     ]
                 },
                 {
@@ -305,18 +305,19 @@
         "outputs": {
             "parameters": {
                 "avdResourceGroup": "[steps('basics').resourceScope.resourceGroup.name]",
+                "location": "[steps('basics').resourceScope.resourceGroup.location]",
                 "workspaceName": "[steps('AVDLandingZone').workspaceSection.workspaceName]",
                 "hostPoolName": "[steps('AVDLandingZone').hostPoolSection.hostPoolName]",
                 "hostPoolType": "[steps('AVDLandingZone').hostPoolSection.hostPoolType]",
                 "loadBalancer": "[steps('AVDLandingZone').hostPoolSection.loadBalancer]",
+                "maxSessions": "[steps('AVDLandingZone').hostPoolSection.maxSessions]",
                 "assignmentType": "[steps('AVDLandingZone').hostPoolSection.assignmentType]",
-                "startVmOnConnect": "[steps('AVDLandingZone').startVmOnConnect]",
-                "createVmRole": "[steps('AVDLandingZone').createVmRole]",
+                "startVmOnConnect": "[steps('AVDLandingZone').hostPoolSection.startVmOnConnect]",
+                "createVmRole": "[steps('AVDLandingZone').hostPoolSection.createVmRole]",
                 "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
                 "avdVNet": "[steps('AVDNetwork').avdVNet]",
                 "fslogixStorage": "[steps('AVDNetwork').fslogixStorage]",
-                "fileBackup": "[steps('AVDNetwork').fileBackup]",
-                "location": "[steps('basics').resourceScope.location.name]"
+                "fileBackup": "[steps('AVDNetwork').fileBackup]"
             },
             "kind": "ResourceGroup"
         }
