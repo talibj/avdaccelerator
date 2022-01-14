@@ -57,19 +57,22 @@
                         },
                         {
                             "name": "hostPoolType",
-                            "type": "Microsoft.Common.OptionsGroup",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Host Pool Type",
                             "defaultValue": "Pooled",
+                            "multiLine": true,
                             "toolTip": "",
                             "constraints": {
                                 "required": true,
                                 "allowedValues": [
                                     {
                                         "label": "Pooled",
+                                        "description": "Multiple users per-VM",
                                         "value": "Pooled"
                                     },
                                     {
                                         "label": "Personal",
+                                        "description": "Single user per-VM",
                                         "value": "Personal"
                                     }
                                 ]
@@ -81,16 +84,19 @@
                             "type": "Microsoft.Common.DropDown",
                             "label": "Load Balancer",
                             "defaultValue": "DepthFirst",
+                            "multiLine": true,
                             "toolTip": "Breadth-first load balancing distributes new user sessions across all available session hosts in the host pool. Depth-first load balancing distributes new user sessions to an available session host with the highest number of connections but has not reached its maximum session limit threshold.",
                             "constraints": {
                                 "required": true,
                                 "allowedValues": [
                                     {
                                         "label": "BreadthFirst",
+                                        "description": "Each new user is placed on the next VM. (Performance Optimized)",
                                         "value": "BreadthFirst"
                                     },
                                     {
                                         "label": "DepthFirst",
+                                        "description": "Each new user is placed on the same VM until max sessions limit. (Cost Optimized)",
                                         "value": "DepthFirst"
                                     }
                                 ]
@@ -136,19 +142,19 @@
 						},																													
                         {
                             "name": "startVmOnConnect",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Start Vm On Connect",
-                            "defaultValue": "true",
-                            "toolTip": "",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Start On Connect",
+                            "defaultValue": "Yes (Recommended)",
+                            "toolTip": "If powered off, start VM once user connects. ",
                             "constraints": {
                                 "required": false,
                                 "allowedValues": [
                                     {
-                                        "label": "true",
+                                        "label": "Yes (Recommended)",
                                         "value": true
                                     },
                                     {
-                                        "label": "false",
+                                        "label": "No",
                                         "value": false
                                     }
                                 ]
@@ -157,19 +163,19 @@
                         },
                         {
                             "name": "createVmRole",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create Start VM on Connect Role",
-                            "defaultValue": "true",
+                            "defaultValue": "Yes (Required if using Start On Connect)",
                             "toolTip": "Create custom Azure IAM role for Start VM on Connect",
                             "constraints": {
                                 "required": false,
                                 "allowedValues": [
                                     {
-                                        "label": "true",
+                                        "label": "Yes (Required if using Start On Connect)",
                                         "value": true
                                     },
                                     {
-                                        "label": "false",
+                                        "label": "No",
                                         "value": false
                                     }
                                 ]
@@ -234,19 +240,19 @@
 						},
                         {
                             "name": "createProfileStorage",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.OptionsGroup",
                             "label": "Create User Profile Storage",
-                            "defaultValue": "false",
+                            "defaultValue": "Yes (Recommended)",
                             "toolTip": "",
                             "constraints": {
                                 "required": false,
                                 "allowedValues": [
                                     {
-                                        "label": "true",
+                                        "label": "Yes (Recommended)",
                                         "value": true
                                     },
                                     {
-                                        "label": "false",
+                                        "label": "No",
                                         "value": false
                                     }
                                 ]
@@ -270,17 +276,17 @@
                            "name": "fileBackup",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Enable Azure Backup for User Profile Data",
-                            "defaultValue": "true",
+                            "defaultValue": "Yes (Recommended)",
                             "toolTip": "",
                             "constraints": {
                                 "required": true,
                                 "allowedValues": [
                                     {
-                                        "label": "true",
+                                        "label": "Yes (Recommended)",
                                         "value": "true"
                                     },
                                     {
-                                        "label": "false",
+                                        "label": "No",
                                         "value": "false"
                                     }
                                 ]
