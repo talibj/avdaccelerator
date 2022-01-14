@@ -407,6 +407,30 @@
                             "visible": true
                         },
                         {
+                            "name": "replicaInfo",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": "[equals(steps('AVDLandingZone').hostPoolSection.createVmRole, false)]",
+                            "options": {
+                                "text": "For performance reasons it is recommended to have 1 replica for every 20 concurrent VM deployments.",
+                                "uri": "https://docs.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries#scaling",
+                                "style": "info"
+                            }
+                        },                         
+						{
+							"name": "imageReplicas",
+							"type": "Microsoft.Common.Slider",
+							"min": 1,
+							"max": 15,
+							"label": "Image Replicas",
+							"defaultValue": 1,
+							"showStepMarkers": true,
+							"toolTip": "Number of in-region replicas for scaling performance.",
+							"constraints": {
+								"required": true
+							},
+							"visible": true
+						},
+                        {
                             "name": "imageCustomization",
                             "type": "Microsoft.Common.DropDown",
                             "label": "Image Customizations",
