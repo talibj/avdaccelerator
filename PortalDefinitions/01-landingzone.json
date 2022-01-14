@@ -25,7 +25,7 @@
                             "location": {
                                 "resourceTypes": []
                             }
-                        }
+                        }                        
                     ]
                 },
                 {
@@ -42,7 +42,7 @@
                                 "name": "workspaceName",
                                 "type": "Microsoft.Common.TextBox",
                                 "label": "Workspace Name",
-                                "defaultValue": "poc",
+                                "defaultValue": "",
                                 "toolTip": "",
                                 "constraints": {
                                     "required": true,
@@ -206,43 +206,102 @@
                     "type": "Microsoft.Common.Section",
                     "visible": true,
                     "elements": [
+                        
 						{
-                            "name": "avdVNet",
-                            "type": "Microsoft.Network.VirtualNetworkCombo",
-                            "visible": true,
-                            "label": {
-                                "virtualNetwork": "Virtual network",
-                                "subnets": "Subnets"
-                            },
-                            "toolTip": {
-                                "virtualNetwork": "",
-                                "subnets": ""
-                            },
-                            "defaultValue": {
-                                "name": "vnet-avd",
-                                "addressPrefixSize": "/24"
-                            },
-                            "constraints": {
-                                "minAddressPrefixSize": "/27"
-                            },
+                            "name": "createAvdVnet",
+                             "type": "Microsoft.Common.OptionsGroup",
+                             "label": "AVD Virtual Network",
+                             "defaultValue": "New",
+                             "toolTip": "",
+                             "constraints": {
+                                 "required": true,
+                                 "allowedValues": [
+                                     {
+                                         "label": "New",
+                                         "value": true
+                                     },
+                                     {
+                                         "label": "Existing",
+                                         "value": false
+                                     }
+                                 ]
+                             },
+                             "visible": true
+                        },
+						{
+							"name": "avdVnetNAme",
+							"type": "Microsoft.Common.TextBox",
+							"label": "VNet Name",
+							"defaultValue": "",
+							"toolTip": "",
+							"constraints": {
+								"required": true,
+								"regex": ""
+							},
+							"visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
+						},
+						{
+							"name": "avdVnetSize",
+							"type": "Microsoft.Common.TextBox",
+							"label": "VNet Address Space",
+							"defaultValue": "10.10.0.0/24",
+							"toolTip": "",
+							"constraints": {
+								"required": true,
+								"regex": ""
+							},
+							"visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
+						}, 
+						{
+							"name": "avdVnetDNS",
+							"type": "Microsoft.Common.TextBox",
+							"label": "VNet DNS Servers",
+							"defaultValue": "10.10.100.50, 10.20.100.50",
+							"toolTip": "Separate multiple entries with a comma",
+							"constraints": {
+								"required": true,
+								"regex": ""
+							},
+							"visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
+						},
+                        {
+                            "name": "vnetSelector",
+                            "type": "Microsoft.Solutions.ResourceSelector",
+                            "label": "Existing VNet",
+                            "visible": "[equals(steps('AVDNetwork').createAvdVnet, false)]",
+                            "resourceType": "Microsoft.Network/virtualNetworks",
                             "options": {
-                                "hideExisting": false
-                            },
-                            "subnets": {
-                                "subnet1": {
-                                "label": "Subnet",
-                                "defaultValue": {
-                                    "name": "subnet-avd",
-                                    "addressPrefixSize": "/24"
-                                },
-                                "constraints": {
-                                    "minAddressPrefixSize": "/27",
-                                    "minAddressCount": 12,
-                                    "requireContiguousAddresses": true
-                                }
+                                "filter": {
+                                    "subscription": "onBasics",
+                                    "location": "onBasics"
                                 }
                             }
-						},
+                        },
+                        {
+                            "name": "subnetApi",
+                            "type": "Microsoft.Solutions.ArmApiControl",
+                            "request": {
+                                "method": "GET",
+                                "path": "[concat(steps('AVDNetwork').vnetSelector.id, '/subnets//subnets?api-version=2020-11-01')]"
+                            }
+                        },
+                        {
+                            "name": "subnetId",
+                            "label": "Existing Subnet",
+                            "type": "Microsoft.Common.DropDown",
+                            "visible": "[equals(steps('AVDNetwork').createAvdVnet, false)]",
+                            "defaultValue": "",
+                            "toolTip": "Select the Subnet. The subnet must have 'privateEndpointNetworkPolicies' and 'privateLinkServiceNetworkPolicies' set to disabled.",
+                            "multiselect": false,
+                            "selectAll": false,
+                            "filter": true,
+                            "filterPlaceholder": "Filter items ...",
+                            "multiLine": true,
+                            "constraints": {
+                                "allowedValues": "[map(steps('AVDNetwork').vnetSelector.subnetApi.value,(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                "required": true
+                            }
+                        },                      
                         {
                             "name": "createProfileStorage",
                             "type": "Microsoft.Common.OptionsGroup",
@@ -264,19 +323,6 @@
                                 ]
                             }
                         },
-						{
-							"name": "fslogixStorage",
-							"type": "Microsoft.Common.TextBox",
-							"label": "Storage Account Name",
-							"defaultValue": "fslpd",
-							"toolTip": "File shares have a 15 character maximum, and must be globally unique. 6 Random characters will be appeneded to the name to ensure uniqueness.",
-							"constraints": {
-								"required": true,
-								"regex": "^[a-z0-9A-Z]{1,9}$",
-								"validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-9 characters long."
-							},
-							"visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
-						},
 						{
                            "name": "fileBackup",
                             "type": "Microsoft.Common.OptionsGroup",
@@ -314,9 +360,7 @@
                 "assignmentType": "[steps('AVDLandingZone').hostPoolSection.assignmentType]",
                 "startVmOnConnect": "[steps('AVDLandingZone').hostPoolSection.startVmOnConnect]",
                 "createVmRole": "[steps('AVDLandingZone').hostPoolSection.createVmRole]",
-                "avdVNet": "[steps('AVDNetwork').avdVNet]",
                 "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
-                "fslogixStorage": "[steps('AVDNetwork').fslogixStorage]",
                 "fileBackup": "[steps('AVDNetwork').fileBackup]"
             },
             "kind": "ResourceGroup"
