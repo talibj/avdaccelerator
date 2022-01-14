@@ -305,7 +305,7 @@
         "outputs": {
             "parameters": {
                 "avdResourceGroup": "[steps('basics').resourceScope.resourceGroup.name]",
-                "location": "[steps('basics').resourceScope.resourceGroup.location]",
+                "location": "[steps('basics').resourceScope.location]",
                 "workspaceName": "[steps('AVDLandingZone').workspaceSection.workspaceName]",
                 "hostPoolName": "[steps('AVDLandingZone').hostPoolSection.hostPoolName]",
                 "hostPoolType": "[steps('AVDLandingZone').hostPoolSection.hostPoolType]",
@@ -314,8 +314,8 @@
                 "assignmentType": "[steps('AVDLandingZone').hostPoolSection.assignmentType]",
                 "startVmOnConnect": "[steps('AVDLandingZone').hostPoolSection.startVmOnConnect]",
                 "createVmRole": "[steps('AVDLandingZone').hostPoolSection.createVmRole]",
-                "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
                 "avdVNet": "[steps('AVDNetwork').avdVNet]",
+                "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
                 "fslogixStorage": "[steps('AVDNetwork').fslogixStorage]",
                 "fileBackup": "[steps('AVDNetwork').fileBackup]"
             },
