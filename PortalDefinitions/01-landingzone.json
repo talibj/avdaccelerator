@@ -195,7 +195,17 @@
                                     ]
                                 },
                                 "visible": "[equals(steps('AVDLandingZone').hostPoolSection.startVmOnConnect, true)]"
-                            }                            
+                            },
+                            {
+                                "name": "vmRoleWarning",
+                                "type": "Microsoft.Common.InfoBox",
+                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.createVmRole, false)]",
+                                "options": {
+                                    "text": "Start VM on Connect will not work without a custom role definition. If you enable start on connect, but do not specify a custom role VM's will not start on-demand.",
+                                    "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect",
+                                    "style": "Warning"
+                                }
+                            }                                                        
                         ]
                         }
                     ]
