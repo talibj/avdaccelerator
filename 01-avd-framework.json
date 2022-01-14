@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "562369298045992509"
+      "templateHash": "16709182324167671187"
     }
   },
   "parameters": {
@@ -21,20 +21,6 @@
       "defaultValue": "uai-prod-eus-imagebuilder",
       "metadata": {
         "description": "Name for managed identity used for Azure Image Builder"
-      }
-    },
-    "keyVaultName": {
-      "type": "string",
-      "defaultValue": "kv-prod-eus-avd",
-      "maxLength": 18,
-      "metadata": {
-        "description": "Name of Key Vault used for AVD deployment secrets"
-      }
-    },
-    "objectId": {
-      "type": "string",
-      "metadata": {
-        "description": "AAD object ID of security principal to grant Key Vault access"
       }
     },
     "workspaceName": {

@@ -6,13 +6,6 @@ param avdResourceGroup string         = 'rg-prod-eus-avdresources'
 @description('Name for managed identity used for Azure Image Builder')
 param managedIdentityName string      =  'uai-prod-eus-imagebuilder'
 
-@description('Name of Key Vault used for AVD deployment secrets')
-@maxLength(18)
-param keyVaultName string                =  'kv-prod-eus-avd'
-
-@description('AAD object ID of security principal to grant Key Vault access')
-param objectId string 
-
 param workspaceName string = 'poc'
 param hostPoolName string = 'poc'
 @allowed([
