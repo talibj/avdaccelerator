@@ -328,7 +328,6 @@
 					"location": "[steps('AVDLandingZone').location]"
                 },
                 "kind": "ResourceGroup",
-                "location": "[steps('basics').resourceScope.location.name]",
                 "template": {
                     "file": "<ARM deployment template relative path>"
                 },
