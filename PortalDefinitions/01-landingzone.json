@@ -14,15 +14,17 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "The AVD Solution Accelerator provisions the foundational items required to build and run an Azure Virtual Desktop.",
+                                "text": "The AVD Solution Accelerator provisions the foundational items required to build and run an Azure Virtual Desktop environment.",
                                 "uri": "https://docs.microsoft.com/azure/role-based-access-control/elevate-access-global-admin",
                                 "style": "Info"
                             }
                         },
                         {
-                            "type":"Microsoft.Common.SubscriptionSelector",
-                            "name": "avdSub",
-                            "label": "AVD subscription"
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "location": {
+                                "resourceTypes": []
+                            }
                         }
                     ]
                 },
@@ -30,197 +32,192 @@
                     "name": "AVDLandingZone",
                     "label": "AVD Landing Zone",
                     "elements": [
-                        {
-                            "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope",
-                            "location": {
-                                "resourceTypes": []
-                            }
-                        },
 						{
 						"name": "workspaceSection",
 						"type": "Microsoft.Common.Section",
 						"label": "AVD Workspace",
+                        "visible": true,
 						"elements": [
-								{
-									"name": "workspaceName",
-									"type": "Microsoft.Common.TextBox",
-									"label": "Workspace Name",
-									"defaultValue": "poc",
-									"toolTip": "",
-									"constraints": {
-										"required": true,
-										"regex": "",
-										"validationMessage": ""
-									},
-									"visible": true
-								}
-						],
-						"visible": true
+                            {
+                                "name": "workspaceName",
+                                "type": "Microsoft.Common.TextBox",
+                                "label": "Workspace Name",
+                                "defaultValue": "poc",
+                                "toolTip": "",
+                                "constraints": {
+                                    "required": true,
+                                    "regex": "",
+                                    "validationMessage": ""
+                                },
+                                "visible": true
+                            }
+						]
 						},
 						{
 						"name": "hostPoolSection",
 						"type": "Microsoft.Common.Section",
 						"label": "AVD Hostpool",
+                        "visible": true,
 						"elements": [
-                        {
-                            "name": "hostPoolName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Host Pool Name",
-                            "defaultValue": "",
-                            "toolTip": "",
-                            "constraints": {
-                                "required": true,
-                                "regex": "",
-                                "validationMessage": ""
+                            {
+                                "name": "hostPoolName",
+                                "type": "Microsoft.Common.TextBox",
+                                "label": "Host Pool Name",
+                                "defaultValue": "",
+                                "toolTip": "",
+                                "constraints": {
+                                    "required": true,
+                                    "regex": "",
+                                    "validationMessage": ""
+                                },
+                                "visible": true
                             },
-                            "visible": true
-                        },
-                        {
-                            "name": "hostPoolType",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Host Pool Type",
-                            "defaultValue": "Pooled",
-                            "multiLine": true,
-                            "toolTip": "",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "Pooled",
-                                        "description": "Multiple users per-VM",
-                                        "value": "Pooled"
-                                    },
-                                    {
-                                        "label": "Personal",
-                                        "description": "Single user per-VM",
-                                        "value": "Personal"
-                                    }
-                                ]
+                            {
+                                "name": "hostPoolType",
+                                "type": "Microsoft.Common.DropDown",
+                                "label": "Host Pool Type",
+                                "defaultValue": "Pooled",
+                                "multiLine": true,
+                                "toolTip": "",
+                                "constraints": {
+                                    "required": true,
+                                    "allowedValues": [
+                                        {
+                                            "label": "Pooled",
+                                            "description": "Multiple users per-VM",
+                                            "value": "Pooled"
+                                        },
+                                        {
+                                            "label": "Personal",
+                                            "description": "Single user per-VM",
+                                            "value": "Personal"
+                                        }
+                                    ]
+                                },
+                                "visible": true
                             },
-                            "visible": true
-                        },
-                        {
-                            "name": "loadBalancer",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Load Balancer",
-                            "defaultValue": "DepthFirst",
-                            "multiLine": true,
-                            "toolTip": "Breadth-first load balancing distributes new user sessions across all available session hosts in the host pool. Depth-first load balancing distributes new user sessions to an available session host with the highest number of connections but has not reached its maximum session limit threshold.",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "BreadthFirst",
-                                        "description": "Each new user is placed on the next VM. (Performance Optimized)",
-                                        "value": "BreadthFirst"
-                                    },
-                                    {
-                                        "label": "DepthFirst",
-                                        "description": "Each new user is placed on the same VM until max sessions limit. (Cost Optimized)",
-                                        "value": "DepthFirst"
-                                    }
-                                ]
+                            {
+                                "name": "loadBalancer",
+                                "type": "Microsoft.Common.DropDown",
+                                "label": "Load Balancer",
+                                "defaultValue": "DepthFirst",
+                                "multiLine": true,
+                                "toolTip": "Breadth-first load balancing distributes new user sessions across all available session hosts in the host pool. Depth-first load balancing distributes new user sessions to an available session host with the highest number of connections but has not reached its maximum session limit threshold.",
+                                "constraints": {
+                                    "required": true,
+                                    "allowedValues": [
+                                        {
+                                            "label": "BreadthFirst",
+                                            "description": "Each new user is placed on the next VM. (Performance Optimized)",
+                                            "value": "BreadthFirst"
+                                        },
+                                        {
+                                            "label": "DepthFirst",
+                                            "description": "Each new user is placed on the same VM until max sessions limit. (Cost Optimized)",
+                                            "value": "DepthFirst"
+                                        }
+                                    ]
+                                },
+                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Pooled')]"
                             },
-                            "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Pooled')]"
-                        },
-                        {
-                            "name": "maxSessions",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Max Sessions",
-                            "defaultValue": "4",
-                            "toolTip": "The maximum number of users that have concurrent sessions on a session host. When setting a host pool to have depth first load balancing or planning to use Autoscaling, you must set an appropriate max session limit according to the configuration of your deployment and capacity of your VMs.",
-                            "constraints": {
-                                "required": false,
-                                "regex": "",
-                                "validationMessage": ""
+                            {
+                                "name": "maxSessions",
+                                "type": "Microsoft.Common.TextBox",
+                                "label": "Max Sessions",
+                                "defaultValue": "4",
+                                "toolTip": "The maximum number of users that have concurrent sessions on a session host. When setting a host pool to have depth first load balancing or planning to use Autoscaling, you must set an appropriate max session limit according to the configuration of your deployment and capacity of your VMs.",
+                                "constraints": {
+                                    "required": false,
+                                    "regex": "",
+                                    "validationMessage": ""
+                                },
+                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Pooled')]"
                             },
-                            "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Pooled')]"
-                        },
-                        {
-                            "name": "assignmentType",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Machine Assignment",
-                            "defaultValue": "Automatic",
-                            "toolTip": "Automatic assignment – The service will select an available host and assign it to an user. Direct assignment – Admin selects a specific host to assign to an user.",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "Automatic",
-                                        "value": "Automatic"
-                                    },
-                                    {
-                                        "label": "Direct",
-                                        "value": "Direct"
-                                    }
-                                ]
+                            {
+                                "name": "assignmentType",
+                                "type": "Microsoft.Common.DropDown",
+                                "label": "Machine Assignment",
+                                "defaultValue": "Automatic",
+                                "toolTip": "Automatic assignment – The service will select an available host and assign it to an user. Direct assignment – Admin selects a specific host to assign to an user.",
+                                "constraints": {
+                                    "required": true,
+                                    "allowedValues": [
+                                        {
+                                            "label": "Automatic",
+                                            "value": "Automatic"
+                                        },
+                                        {
+                                            "label": "Direct",
+                                            "value": "Direct"
+                                        }
+                                    ]
+                                },
+                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Personal')]"
+                            }
+                        ]
+                        },																													
+                            {
+                                "name": "startVmOnConnect",
+                                "type": "Microsoft.Common.OptionsGroup",
+                                "label": "Start On Connect",
+                                "defaultValue": "Yes (Recommended)",
+                                "toolTip": "If powered off, start VM once user connects. ",
+                                "constraints": {
+                                    "required": false,
+                                    "allowedValues": [
+                                        {
+                                            "label": "Yes (Recommended)",
+                                            "value": true
+                                        },
+                                        {
+                                            "label": "No",
+                                            "value": false
+                                        }
+                                    ]
+                                },
+                                "visible": true
                             },
-                            "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Personal')]"
-                        }
-						],
-						"visible": true
-						},																													
-                        {
-                            "name": "startVmOnConnect",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Start On Connect",
-                            "defaultValue": "Yes (Recommended)",
-                            "toolTip": "If powered off, start VM once user connects. ",
-                            "constraints": {
-                                "required": false,
-                                "allowedValues": [
-                                    {
-                                        "label": "Yes (Recommended)",
-                                        "value": true
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": false
-                                    }
-                                ]
+                            {
+                                "name": "createVmRole",
+                                "type": "Microsoft.Common.OptionsGroup",
+                                "label": "Create Start VM on Connect Role",
+                                "defaultValue": "Yes (Required if using Start On Connect)",
+                                "toolTip": "Create custom Azure IAM role for Start VM on Connect",
+                                "constraints": {
+                                    "required": false,
+                                    "allowedValues": [
+                                        {
+                                            "label": "Yes (Required if using Start On Connect)",
+                                            "value": true
+                                        },
+                                        {
+                                            "label": "No",
+                                            "value": false
+                                        }
+                                    ]
+                                },
+                                "visible": "[equals(steps('AVDLandingZone').startVmOnConnect, true)]"
                             },
-                            "visible": true
-                        },
-                        {
-                            "name": "createVmRole",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Create Start VM on Connect Role",
-                            "defaultValue": "Yes (Required if using Start On Connect)",
-                            "toolTip": "Create custom Azure IAM role for Start VM on Connect",
-                            "constraints": {
-                                "required": false,
-                                "allowedValues": [
-                                    {
-                                        "label": "Yes (Required if using Start On Connect)",
-                                        "value": true
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": false
-                                    }
-                                ]
-                            },
-                            "visible": "[equals(steps('AVDLandingZone').startVmOnConnect, true)]"
-                        },
-                        {
-                            "name": "location",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Location",
-                            "defaultValue": "[[resourceGroup().location]",
-                            "toolTip": "",
-                            "constraints": {
-                                "required": false,
-                                "regex": "",
-                                "validationMessage": ""
-                            },
-                            "visible": false
-                        }
+                            {
+                                "name": "location",
+                                "type": "Microsoft.Common.TextBox",
+                                "label": "Location",
+                                "defaultValue": "[[resourceGroup().location]",
+                                "toolTip": "",
+                                "constraints": {
+                                    "required": false,
+                                    "regex": "",
+                                    "validationMessage": ""
+                                },
+                                "visible": false
+                            }
                     ]
                 },
                 {
                     "name": "AVDNetwork",
                     "label": "AVD Network",
+                    "type": "Microsoft.Common.Section",
+                    "visible": true,
                     "elements": [
 						{
 						"name": "avdVNet",
@@ -316,16 +313,22 @@
 						}													
 					]
                 }								
-
             ]
         },
         "outputs": {
             "parameters": {
-                "avdResourceGroup": "[steps('AVDLandingZone').resourceScope.resourceGroup.name]",
+                "avdResourceGroup": "[steps('basics').resourceScope.resourceGroup.name]",
                 "workspaceName": "[steps('AVDLandingZone').workspaceSection.workspaceName]",
                 "hostPoolName": "[steps('AVDLandingZone').hostPoolSection.hostPoolName]",
                 "hostPoolType": "[steps('AVDLandingZone').hostPoolSection.hostPoolType]",
+                "loadBalancer": "[steps('AVDLandingZone').hostPoolSection.loadBalancer]",
+                "assignmentType": "[steps('AVDLandingZone').hostPoolSection.assignmentType]",
+                "startVmOnConnect": "[steps('AVDLandingZone').startVmOnConnect]",
                 "createVmRole": "[steps('AVDLandingZone').createVmRole]",
+                "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
+                "avdVNet": "[steps('AVDNetwork').avdVNet]",
+                "fslogixStorage": "[steps('AVDNetwork').fslogixStorage]",
+                "fileBackup": "[steps('AVDNetwork').fileBackup]",
                 "location": "[steps('AVDLandingZone').location]"
             },
             "kind": "ResourceGroup"
