@@ -30,7 +30,7 @@
                 },
                 {
                     "name": "AVDLandingZone",
-                    "label": "AVD Landing Zone",
+                    "label": "AVD Components",
                     "elements": [
 						{
 						"name": "workspaceSection",
@@ -202,7 +202,7 @@
                 },
                 {
                     "name": "AVDNetwork",
-                    "label": "Framework",
+                    "label": "Network",
                     "type": "Microsoft.Common.Section",
                     "visible": true,
                     "elements": [                      
