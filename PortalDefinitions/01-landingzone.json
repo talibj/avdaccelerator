@@ -202,14 +202,14 @@
                 },
                 {
                     "name": "AVDNetwork",
-                    "label": "AVD Network",
+                    "label": "Framework",
                     "type": "Microsoft.Common.Section",
                     "visible": true,
                     "elements": [                      
 						{
                             "name": "createAvdVnet",
                              "type": "Microsoft.Common.OptionsGroup",
-                             "label": "AVD Virtual Network",
+                             "label": "Network",
                              "defaultValue": "New",
                              "toolTip": "",
                              "constraints": {
@@ -655,7 +655,7 @@
                             "elements": [ 
  
                                 {
-                                    "name": "keyVaultCertificateSelection",
+                                    "name": "keyvaultCertInstall",
                                     "type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
                                     "visible": "[equals(steps('Images').installSSL, true)]",
                                     "toolTip": "Select certificate",
@@ -682,8 +682,8 @@
                 "createVmRole": "[steps('AVDLandingZone').hostPoolSection.createVmRole]",
                 "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
                 "fileBackup": "[steps('AVDNetwork').fileBackup]",
-                "keyVaultName": "[steps('Images').keyVault.name]",
-                "keyVaultId": "[steps('Images').keyVault.id]"
+                "keyVaultName": "[steps('Images').keyVault.keyvaultCertInstall.name]",
+                "keyVaultId": "[steps('Images').keyVault.keyvaultCertInstall.id]"
             },
             "kind": "ResourceGroup"
         }
