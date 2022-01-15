@@ -485,12 +485,12 @@
                         {
                             "name": "imageRegionReplicas",
                             "type": "Microsoft.Common.DropDown",
-                            "label": "Image Region Replicas",
+                            "label": "Image Regions",
                             "defaultValue": "Select all",
                             "multiselect": true,
                             "selectAll": true,
                             "filter": true,
-                            "toolTip": "",
+                            "toolTip": "Select the regions where this image will be deployed.",
                             "constraints": {
                                 "required": true,
                                 "allowedValues": [
