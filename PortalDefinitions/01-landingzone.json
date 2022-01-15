@@ -574,10 +574,6 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Don't redirect any drives",
-                                                "value": "drivestoredirect:s:"
-                                            },
-                                            {
                                                 "label": "Redirect all drives, including ones that are connected later",
                                                 "value": "drivestoredirect:s:*"
                                             },
@@ -588,7 +584,11 @@
                                             {
                                                 "label": "Manually enter drives and labels",
                                                 "value": "manualDrives"
-                                            }                                                                                                                                                           
+                                            },
+                                            {
+                                                "label": "Don't redirect any drives",
+                                                "value": "drivestoredirect:s:"
+                                            }                                                                                                                                                                                                       
                                         ]
                                     },
                                     "visible": true
@@ -597,9 +597,9 @@
                                         "name": "hpSelectedDriveRedirection",
                                         "type": "Microsoft.Common.TextBox",
                                         "label": "Drives",
-                                        "defaultValue": "C\\:\\,E\\:\\",
+                                        "defaultValue": "C\\:\\;E\\:\\",
                                         "toolTip": "Manually choose which drives should be redirected.",
-                                        "placeholder": "Example (redirect C and E drives): C\\:\\, E\\:\\",
+                                        "placeholder": "Example (redirect C and E drives): C\\:\\; E\\:\\",
                                         "multiLine": false,
                                         "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpDriveRedirection, 'manualDrives')]",
                                         "constraints": {
@@ -632,7 +632,7 @@
                                                 "value": "redirectclipboard:i:1"
                                             },
                                             {
-                                                "label": "Clipboard on local computer isn't available in remote session",
+                                                "label": "Clipboard on local computer is not available in remote session",
                                                 "value": "redirectclipboard:i:0"
                                             }                                           
                                         ]
@@ -738,15 +738,15 @@
                                             {
                                                 "label": "Redirect all USB devices that are not already redirected by another high-level redirection",
                                                 "value": "usbdevicestoredirect:s:*"
+                                            },                                        
+                                            {
+                                                "label": "Redirect all devices that are members of the specified device setup class or device defined by specific instance ID",
+                                                "value": "usbInstanceIds"
                                             },
                                             {
                                                 "label": "Don't redirect Redirect any USB devices",
                                                 "value": "usbdevicestoredirect:s:"
-                                            },                                            
-                                            {
-                                                "label": "Redirect all devices that are members of the specified device setup class or device defined by specific instance ID",
-                                                "value": "usbInstanceIds"
-                                            }                                           
+                                            }                                                                                       
                                         ]
                                     },
                                     "visible": true
@@ -757,17 +757,12 @@
                                     "label": "USB Device ID's",
                                     "defaultValue": "",
                                     "toolTip": "Choose which USB device or class ID's should be redirected.",
-                                    "placeholder": "Example: 52ae366d-f376-4c62-a2d9-e0fce0cc2a18\\,852cbf4e-f500-446c-9ff7-6b6a304b1861",
+                                    "placeholder": "Example: 52ae366d-f376-4c62-a2d9-e0fce0cc2a18\\;6aea2da3-17cb-4cd7-9977-47c9cae404ab",
                                     "multiLine": true,
                                     "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpusbdevicestoredirect, 'usbInstanceIds')]",
                                     "constraints": {
                                     "required": false,
-                                    "validations": [
-                                        {
-                                        "regex": "^/^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$/i",
-                                        "message": "USB ID format error: 52ae366d-f376-4c62-a2d9-e0fce0cc2a18\\,852cbf4e-f500-446c-9ff7-6b6a304b1861"
-                                        }
-                                    ]
+                                    "validations": []
                                     }
                                 }                                                                                                                                                                                                                                                                                                                                                                                                                   
                             ]
