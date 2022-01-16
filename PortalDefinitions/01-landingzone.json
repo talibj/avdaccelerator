@@ -260,7 +260,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Client automatically tries to reconnect",
+                                                "label": "Client automatically tries to reconnect (Default)",
                                                 "value": "autoreconnection enabled:1:"
                                             },
                                             {
@@ -289,7 +289,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Use automatic network bandwidth",
+                                                "label": "Use automatic network bandwidth (Default)",
                                                 "value": "bandwidthautodetect:i:1"
                                             },
                                             {
@@ -316,7 +316,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Enable automatic network type detection",
+                                                "label": "Enable automatic network type detection (Default)",
                                                 "value": "networkautodetect:i:1"
                                             },
                                             {
@@ -343,7 +343,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Enable RDP bulk compression",
+                                                "label": "Enable RDP bulk compression (Default)",
                                                 "value": "compression:i:1"
                                             },
                                             {
@@ -370,7 +370,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Use RDP-effecient multimedia streaming for video playback when possible",
+                                                "label": "Use RDP-effecient multimedia streaming for video playback when possible (Default)",
                                                 "value": "videoplaybackmode:i:1"
                                             },
                                             {
@@ -382,10 +382,7 @@
                                     "visible": true
                                 }                                                                                                                                         
                             ]
-
                         },
-				
-
                         {
                             "name": "deviceAdjust",
                             "type": "Microsoft.Common.OptionsGroup",
@@ -433,7 +430,7 @@
                                                 "value": "audiocapturemode:i:1"
                                             },
                                             {
-                                                "label": "Disable audio capture from the local device",
+                                                "label": "Disable audio capture from the local device (Default)",
                                                 "value": {
                                                     "name": "audiocapturemode:i:0"
                                                 }
@@ -458,7 +455,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Enable encoding of redirected video",
+                                                "label": "Enable encoding of redirected video (Default)",
                                                 "value": "encode redirected video capture:i:1"
                                             },
                                             {
@@ -485,7 +482,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "High compression video. Quality my suffer when there is a lot of motion",
+                                                "label": "High compression video. Quality my suffer when there is a lot of motion (Default)",
                                                 "value": "redirected video capture encoding quality:i:0"
                                             },
                                             {
@@ -516,7 +513,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Play sounds on the local computer",
+                                                "label": "Play sounds on the local computer (Default)",
                                                 "value": "audiomode:i:0"
                                             },
                                             {
@@ -551,7 +548,7 @@
                                                 "value": "camerastoredirect:s:*"
                                             },
                                             {
-                                                "label": "Don't redirect any cameras",
+                                                "label": "Don't redirect any cameras (Default)",
                                                 "value": "camerastoredirect:s:"
                                             }                                           
                                         ]
@@ -586,7 +583,7 @@
                                                 "value": "manualDrives"
                                             },
                                             {
-                                                "label": "Don't redirect any drives",
+                                                "label": "Don't redirect any drives (Default)",
                                                 "value": "drivestoredirect:s:"
                                             }                                                                                                                                                                                                       
                                         ]
@@ -628,7 +625,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Clipboard on local computer is available in remote session",
+                                                "label": "Clipboard on local computer is available in remote session (Default)",
                                                 "value": "redirectclipboard:i:1"
                                             },
                                             {
@@ -659,7 +656,7 @@
                                                 "value": "redirectcomports:i:1"
                                             },
                                             {
-                                                "label": "COM ports on the local computer are not available in the remote session",
+                                                "label": "COM ports on the local computer are not available in the remote session (Default)",
                                                 "value": "redirectcomports:i:0"
                                             }                                           
                                         ]
@@ -682,7 +679,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "The printers on the local computer are available in the remote session",
+                                                "label": "The printers on the local computer are available in the remote session (Default)",
                                                 "value": "redirectprinters:i:1"
                                             },
                                             {
@@ -709,7 +706,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "The smart card device on the local computer is available in the remote session",
+                                                "label": "The smart card device on the local computer is available in the remote session (Default)",
                                                 "value": "redirectsmartcards:i:1"
                                             },
                                             {
@@ -744,29 +741,28 @@
                                                 "value": "usbInstanceIds"
                                             },
                                             {
-                                                "label": "Don't redirect Redirect any USB devices",
+                                                "label": "Don't redirect Redirect any USB devices (Default)",
                                                 "value": "usbdevicestoredirect:s:"
                                             }                                                                                       
                                         ]
                                     },
                                     "visible": true
                                 },
-                                {
-                                    "name": "hpSelectedUsbdevicestoredirect",
-                                    "type": "Microsoft.Common.TextBox",
-                                    "label": "USB Device ID's",
-                                    "defaultValue": "",
-                                    "toolTip": "Choose which USB device or class ID's should be redirected.",
-                                    "placeholder": "Example: 52ae366d-f376-4c62-a2d9-e0fce0cc2a18\\;6aea2da3-17cb-4cd7-9977-47c9cae404ab",
-                                    "multiLine": true,
-                                    "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpusbdevicestoredirect, 'usbInstanceIds')]",
-                                    "constraints": {
-                                    "required": false,
-                                    "validations": []
-                                    }
-                                }                                                                                                                                                                                                                                                                                                                                                                                                                   
+                                    {
+                                        "name": "hpSelectedUsbdevicestoredirect",
+                                        "type": "Microsoft.Common.TextBox",
+                                        "label": "USB Device ID's",
+                                        "defaultValue": "",
+                                        "toolTip": "Choose which USB device or class ID's should be redirected.",
+                                        "placeholder": "Example: 52ae366d-f376-4c62-a2d9-e0fce0cc2a18\\;6aea2da3-17cb-4cd7-9977-47c9cae404ab",
+                                        "multiLine": true,
+                                        "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpusbdevicestoredirect, 'usbInstanceIds')]",
+                                        "constraints": {
+                                        "required": false,
+                                        "validations": []
+                                        }
+                                    }                                                                                                                                                                                                                                                                                                                                                                                                                   
                             ]
-
                         },
                         {
                             "name": "displayAdjust",
@@ -788,8 +784,7 @@
                                 ]
                             },
                             "visible": true
-                        },
-                   	                        
+                        },   
                         {
                             "name": "displaySettings",
                             "type": "Microsoft.Common.Section",
@@ -812,7 +807,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Enable multiple display support",
+                                                "label": "Enable multiple display support (Default)",
                                                 "value": "use multimon:i:1"
                                             },
                                             {
@@ -840,7 +835,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "All displays",
+                                                "label": "All displays (Default)",
                                                 "value": "selectedmonitors:s:"
                                             },
                                             {
@@ -871,7 +866,7 @@
                                                 "value": "maximizetocurrentdisplays:i:1"
                                             },
                                             {
-                                                "label": "Session goes full screen on the displays initially selected when maximizing",
+                                                "label": "Session goes full screen on the displays initially selected when maximizing (Default)",
                                                 "value": "maximizetocurrentdisplays:i:0"
                                             }
                                         ]
@@ -899,7 +894,7 @@
                                                 "value": "singlemoninwindowedmode:i:1"
                                             },
                                             {
-                                                "label": "Session retains all displays when exiting full screen",
+                                                "label": "Session retains all displays when exiting full screen (Default)",
                                                 "value": "singlemoninwindowedmode:i:0"
                                             }
                                         ]
@@ -923,7 +918,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "The remote session will appear full screen",
+                                                "label": "The remote session will appear full screen (Default)",
                                                 "value": "screen mode id:i:2"
                                             },
                                             {
@@ -955,7 +950,7 @@
                                                 "value": "smart sizing:i:1"
                                             },
                                             {
-                                                "label": "The local window content will not scale when resized",
+                                                "label": "The local window content will not scale when resized (Default)",
                                                 "value": "smart sizing:i:0"
                                             }
                                         ]
@@ -979,7 +974,7 @@
                                                 "value": null
                                             },
                                             {
-                                                "label": "Session resolution updates as the local window resizes",
+                                                "label": "Session resolution updates as the local window resizes (Default)",
                                                 "value": "dynamic resolution:i:1"
                                             },
                                             {
@@ -992,7 +987,7 @@
                                 {
                                     "name": "desktopsizeid",
                                     "type": "Microsoft.Common.DropDown",
-                                    "label": "Desktop size",
+                                    "label": "Desktop size (Default match local computer)",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "visible": true,
@@ -1030,7 +1025,6 @@
                                 }                                                                                                                                                                                                                                         
                             ]                  
                         }
-
                     ]
                 },                
                 {
