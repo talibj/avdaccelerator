@@ -91,7 +91,7 @@
                             {
                                 "name": "hostPoolNameFriendly",
                                 "type": "Microsoft.Common.TextBox",
-                                "label": "Friendly Name (Visible to users",
+                                "label": "Friendly Name (Visible to users)",
                                 "placeholder": "Example: GPU Desktop",
                                 "defaultValue": "",
                                 "toolTip": "",
