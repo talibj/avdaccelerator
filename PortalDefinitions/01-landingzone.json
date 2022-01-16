@@ -937,7 +937,7 @@
                                 {
                                     "name": "smartsizing",
                                     "type": "Microsoft.Common.DropDown",
-                                    "label": "Screen mode",
+                                    "label": "Smart sizing",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "visible": true,
@@ -961,7 +961,73 @@
                                         ]
                                     }
                                     
-                                }                                                                                                                                                                      
+                                },
+                                {
+                                    "name": "dynamicresolution",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Dynamic resolution",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "visible": true,
+                                    "defaultValue": "Not configured",
+                                    "toolTip": "Determines whether the resolution of the remote session is automatically updated when the local window is resized.",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Not configured",
+                                                "value": null
+                                            },
+                                            {
+                                                "label": "Session resolution updates as the local window resizes",
+                                                "value": "dynamic resolution:i:1"
+                                            },
+                                            {
+                                                "label": "Session resolution remains static for the duration of the session",
+                                                "value": "dynamic resolution:i:0"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "desktopsizeid",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Desktop size",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "visible": true,
+                                    "defaultValue": "Not configured",
+                                    "toolTip": "Specifies the dimensions of the remote session desktop from a set of pre-defined options. This setting is overridden if desktopheight and desktopwidth are specified.",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Not configured",
+                                                "value": null
+                                            },
+                                            {
+                                                "label": "640×480",
+                                                "value": "desktop size id:i:0"
+                                            },
+                                            {
+                                                "label": "800×600",
+                                                "value": "desktop size id:i:1"
+                                            },
+                                            {
+                                                "label": "1024×768",
+                                                "value": "desktop size id:i:2"
+                                            },
+                                            {
+                                                "label": "1280×1024",
+                                                "value": "desktop size id:i:3"
+                                            },
+                                            {
+                                                "label": "1600×1200",
+                                                "value": "desktop size id:i:4"
+                                            }
+                                        ]
+                                    }
+                                }                                                                                                                                                                                                                                         
                             ]                  
                         }
 
