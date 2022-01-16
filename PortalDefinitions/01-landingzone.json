@@ -767,8 +767,203 @@
                                 }                                                                                                                                                                                                                                                                                                                                                                                                                   
                             ]
 
+                        },
+                        {
+                            "name": "displayAdjust",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Adjust display settings",
+                            "defaultValue": "No",
+                            "toolTip": "Settings for client display for multiple-monitors, resolution, and screen re-sizing.",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "Yes",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                   	                        
+                        {
+                            "name": "displaySettings",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Display settings",
+                            "visible": "[equals(steps('hostPoolOptions').displayAdjust, true)]",
+                            "elements": [  
+                                {
+                                    "name": "multimon",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Multiple displays",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "defaultValue": "Not configured",
+                                    "toolTip": "Determines whether the remote session will use one or multiple displays from the local computer.",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Not configured",
+                                                "value": null
+                                            },
+                                            {
+                                                "label": "Enable multiple display support",
+                                                "value": "use multimon:i:1"
+                                            },
+                                            {
+                                                "label": "Do not enable multiple display support",
+                                                "value": "use multimon:i:0"
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "selectedmonitors",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Multiple displays",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "visible": "[equals(steps('hostPoolOptions').displaySettings.multimon, 'use multimon:i:1')]",
+                                    "defaultValue": "Not configured",
+                                    "toolTip": "Specifies which local displays to use from the remote session. The selected displays must be contiguous.",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Not configured",
+                                                "value": null
+                                            },
+                                            {
+                                                "label": "All displays",
+                                                "value": "selectedmonitors:s:"
+                                            },
+                                            {
+                                                "label": "Manually enter list of machine specific display IDs",
+                                                "value": "selectedmonitors:s:value"
+                                            }
+                                        ]
+                                    }
+                                },                       
+                                {
+                                    "name": "maximizetocurrentdisplays",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Maximize to current displays",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "visible": "[equals(steps('hostPoolOptions').displaySettings.multimon, 'use multimon:i:1')]",
+                                    "defaultValue": "Not configured",
+                                    "toolTip": "Determines which display the remote session goes full screen on when maximizing.",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Not configured",
+                                                "value": null
+                                            },
+                                            {
+                                                "label": "Session dynamically goes full screen on the displays touched by the session window when maximizing",
+                                                "value": "maximizetocurrentdisplays:i:1"
+                                            },
+                                            {
+                                                "label": "Session goes full screen on the displays initially selected when maximizing",
+                                                "value": "maximizetocurrentdisplays:i:0"
+                                            }
+                                        ]
+                                    }
+                                    
+                                },
+                                {
+                                    "name": "singlemoninwindowedmode",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Multi to single display switch",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "visible": "[equals(steps('hostPoolOptions').displaySettings.multimon, 'use multimon:i:1')]",
+                                    "defaultValue": "Not configured",
+                                    "toolTip": "Determines whether a multi display remote session automatically switches to single display when exiting full screen.",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Not configured",
+                                                "value": null
+                                            },
+                                            {
+                                                "label": "Session switches to single display when exiting full screen",
+                                                "value": "singlemoninwindowedmode:i:1"
+                                            },
+                                            {
+                                                "label": "Session retains all displays when exiting full screen",
+                                                "value": "singlemoninwindowedmode:i:0"
+                                            }
+                                        ]
+                                    }
+                                    
+                                },
+                                {
+                                    "name": "screenmodeid",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Screen mode",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "visible": true,
+                                    "defaultValue": "Not configured",
+                                    "toolTip": "Determines whether the remote session window appears full screen when you launch the connection.",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Not configured",
+                                                "value": null
+                                            },
+                                            {
+                                                "label": "The remote session will appear full screen",
+                                                "value": "screen mode id:i:2"
+                                            },
+                                            {
+                                                "label": "The remote session will appear in a window",
+                                                "value": "screen mode id:i:1"
+                                            }
+                                        ]
+                                    }
+                                    
+                                },
+                                {
+                                    "name": "smartsizing",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Screen mode",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "visible": true,
+                                    "defaultValue": "Not configured",
+                                    "toolTip": "Determines whether or not the local computer scales the content of the remote session to fit the window size.",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Not configured",
+                                                "value": null
+                                            },
+                                            {
+                                                "label": "The local window content will scale when resized",
+                                                "value": "smart sizing:i:1"
+                                            },
+                                            {
+                                                "label": "The local window content will not scale when resized",
+                                                "value": "smart sizing:i:0"
+                                            }
+                                        ]
+                                    }
+                                    
+                                }                                                                                                                                                                      
+                            ]                  
                         }
-
 
                     ]
                 },                
