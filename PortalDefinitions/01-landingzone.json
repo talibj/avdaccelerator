@@ -7,7 +7,7 @@
             "steps": [
                 {
                     "name": "basics",
-                    "label": "AVD Solution Accelerator",
+                    "label": "Getting started",
                     "elements": [
                         {
                             "name": "info",
@@ -15,7 +15,7 @@
                             "visible": true,
                             "options": {
                                 "text": "The AVD Solution Accelerator provisions the foundational items required to build and run an Azure Virtual Desktop environment.",
-                                "uri": "https://docs.microsoft.com/azure/role-based-access-control/elevate-access-global-admin",
+                                "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/overview",
                                 "style": "Info"
                             }
                         },
@@ -41,7 +41,22 @@
                             {
                                 "name": "workspaceName",
                                 "type": "Microsoft.Common.TextBox",
-                                "label": "Workspace Name",
+                                "label": "Workspace Name (Visible in Azure)",
+                                "placeholder": "Example: avd-graphicdesign-workspace",
+                                "defaultValue": "",
+                                "toolTip": "A workspace is a logical grouping of application groups (published desktops and/or applications)",
+                                "constraints": {
+                                    "required": true,
+                                    "regex": "",
+                                    "validationMessage": ""
+                                },
+                                "visible": true
+                            },
+                            {
+                                "name": "workspaceNameFriendly",
+                                "type": "Microsoft.Common.TextBox",
+                                "label": "Friendly Name (Visible to users)",
+                                "placeholder": "Example: Graphics Design",
                                 "defaultValue": "",
                                 "toolTip": "",
                                 "constraints": {
@@ -50,7 +65,7 @@
                                     "validationMessage": ""
                                 },
                                 "visible": true
-                            }
+                            }                            
 						]
 						},
 						{
@@ -62,7 +77,22 @@
                             {
                                 "name": "hostPoolName",
                                 "type": "Microsoft.Common.TextBox",
-                                "label": "Host Pool Name",
+                                "label": "Host Pool Name (Visible in Azure)",
+                                "defaultValue": "",
+                                "placeholder": "Example: avd-graphicdesign-hostpool",
+                                "toolTip": "A host pool is a collection of virtual machines deployed from the same base image.",
+                                "constraints": {
+                                    "required": true,
+                                    "regex": "",
+                                    "validationMessage": ""
+                                },
+                                "visible": true
+                            },
+                            {
+                                "name": "hostPoolNameFriendly",
+                                "type": "Microsoft.Common.TextBox",
+                                "label": "Friendly Name (Visible to users",
+                                "placeholder": "Example: GPU Desktop",
                                 "defaultValue": "",
                                 "toolTip": "",
                                 "constraints": {
@@ -71,7 +101,7 @@
                                     "validationMessage": ""
                                 },
                                 "visible": true
-                            },
+                            },                            
                             {
                                 "name": "hostPoolType",
                                 "type": "Microsoft.Common.DropDown",
