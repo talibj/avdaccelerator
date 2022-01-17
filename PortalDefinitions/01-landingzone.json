@@ -30,7 +30,7 @@
                 },
                 {
                     "name": "AVDLandingZone",
-                    "label": "AVD Components",
+                    "label": "Components",
                     "elements": [
                         {
                             "name": "avdNaming",
@@ -178,7 +178,7 @@
 						{
 						"name": "hostPoolSection",
 						"type": "Microsoft.Common.Section",
-						"label": "Host Pool Type ",
+						"label": "Host Pool",
                         "visible": true,
 						"elements": [                          
                             {
@@ -324,7 +324,7 @@
                 },
                 {
                     "name": "hostPoolOptions",
-                    "label": "Host Pool Settings",
+                    "label": "Host pool settings",
                     "elements": [
                         {
                             "name": "sessionAdjust",
@@ -1293,7 +1293,7 @@
                 },
                 {
                     "name": "Images",
-                    "label": "Image Customization",
+                    "label": "Image customization",
                     "elements": [										
                         {
                             "name": "buildImages",
