@@ -110,42 +110,70 @@
                             "visible": "[equals(steps('AVDLandingZone').avdNaming, true)]"
                         },
                         {
-                            "name": "friendlyNameInfo",
-                            "type": "Microsoft.Common.InfoBox",
+                            "name": "line",
+                            "type": "Microsoft.Common.TextBlock",
                             "visible": true,
                             "options": {
-                                "text": "Friendly names make it easier for end-users to identify resources they have been assigned.",
-                                "uri": "https://github.com/Azure/avdaccelerator/blob/em-customui/Images/friendlyName.png",
-                                "style": "info"
+                              "text": "________________________________________________________________________________________________________________________________"
                             }
-                        },                                      
-                        {
-                            "name": "workspaceFriendlyName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Workspace name",
-                            "placeholder": "Example: Finance Applications",
-                            "defaultValue": "",
-                            "toolTip": "This name is visible to users and is how applications will be grouped in the AVD user interface.",
-                            "constraints": {
-                                "required": true,
-                                "regex": "",
-                                "validationMessage": ""
-                            },
-                            "visible": true
-                        },
-                        {
-                            "name": "sessionHostFriendly",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Desktop name",
-                            "defaultValue": "",
-                            "placeholder": "Example: My Desktop",
-                            "toolTip": "This name is visible to users and is the name of the desktop.",
-                            "constraints": {
-                                "required": true,
-                                "regex": "",
-                                "validationMessage": ""
-                            },
-                            "visible": true
+                        },                         
+
+						{
+                            "name": "friendlyNameSection",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Friendly Names",
+                            "visible": true,
+                            "elements": [
+                                              
+                                {
+                                    "name": "friendlyNameInfo",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                      "text": "Friendly names make it easier for end-users to identify resources they have been assigned",
+                                      "link": {
+                                        "label": "Example view",
+                                        "uri": "https://github.com/Azure/avdaccelerator/blob/em-customui/Images/friendlyName.png"
+                                      }
+                                    }
+                                },                                
+                                {
+                                    "name": "workspaceFriendlyName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Workspace name",
+                                    "placeholder": "Example: Finance Applications",
+                                    "defaultValue": "",
+                                    "toolTip": "This name is visible to users and is how applications will be grouped in the AVD user interface.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "",
+                                        "validationMessage": ""
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "sessionHostFriendly",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Desktop name",
+                                    "defaultValue": "",
+                                    "placeholder": "Example: My Desktop",
+                                    "toolTip": "This name is visible to users and is the name of the desktop.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "",
+                                        "validationMessage": ""
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "line",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                      "text": "________________________________________________________________________________________________________________________________"
+                                    }
+                                }                                
+                            ]
                         },                        
 						{
 						"name": "hostPoolSection",
