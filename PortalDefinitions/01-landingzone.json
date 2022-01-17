@@ -115,7 +115,7 @@
                             "visible": true,
                             "options": {
                                 "text": "Friendly names make it easier for end-users to identify resources they have been assigned.",
-                                "uri": "https://docs.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries#scaling",
+                                "uri": "https://github.com/Azure/avdaccelerator/blob/em-customui/Images/friendlyName.png",
                                 "style": "info"
                             }
                         },                                      
