@@ -32,80 +32,131 @@
                     "name": "AVDLandingZone",
                     "label": "AVD Components",
                     "elements": [
-						{
-						"name": "workspaceSection",
-						"type": "Microsoft.Common.Section",
-						"label": "AVD Workspace",
-                        "visible": true,
-						"elements": [
-                            {
-                                "name": "workspaceName",
-                                "type": "Microsoft.Common.TextBox",
-                                "label": "Workspace Name (Visible in Azure)",
-                                "placeholder": "Example: avd-graphicdesign-workspace",
-                                "defaultValue": "",
-                                "toolTip": "A workspace is a logical grouping of application groups (published desktops and/or applications)",
-                                "constraints": {
-                                    "required": true,
-                                    "regex": "",
-                                    "validationMessage": ""
-                                },
-                                "visible": true
+                        {
+                            "name": "avdNaming",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Resource naming",
+                            "defaultValue": "Simple (Recommended)",
+                            "toolTip": "If powered off, start VM once user connects. ",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "Simple (Recommended)",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "Advanced",
+                                        "value": false
+                                    }
+                                ]
                             },
-                            {
-                                "name": "workspaceNameFriendly",
-                                "type": "Microsoft.Common.TextBox",
-                                "label": "Friendly Name (Visible to users)",
-                                "placeholder": "Example: Graphics Design",
-                                "defaultValue": "",
-                                "toolTip": "",
-                                "constraints": {
-                                    "required": true,
-                                    "regex": "",
-                                    "validationMessage": ""
-                                },
-                                "visible": true
-                            }                            
-						]
-						},
+                            "visible": true
+                        },
+                        {
+                            "name": "workspaceName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Workspace name",
+                            "placeholder": "",
+                            "defaultValue": "",
+                            "toolTip": "A workspace is a logical grouping of application groups (published desktops and/or applications)",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": "[equals(steps('AVDLandingZone').avdNaming, false)]"
+                        },
+                        {
+                            "name": "appGroupName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Application group name",
+                            "defaultValue": "",
+                            "placeholder": "",
+                            "toolTip": "An app group is a logical grouping of applications installed on session hosts in the host pool.",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": "[equals(steps('AVDLandingZone').avdNaming, false)]"
+                        },                            
+                        {
+                            "name": "hostPoolName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Host pool name",
+                            "defaultValue": "",
+                            "placeholder": "",
+                            "toolTip": "A host pool is a collection of virtual machines deployed from the same base image.",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": "[equals(steps('AVDLandingZone').avdNaming, false)]"
+                        },
+                        {
+                            "name": "avdNamingConvention",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "AVD names",
+                            "placeholder": "Example: finance",
+                            "defaultValue": "",
+                            "toolTip": "Resources will be derived from this name. workspace-name, app-name, hostpool-name",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": "[equals(steps('AVDLandingZone').avdNaming, true)]"
+                        },
+                        {
+                            "name": "friendlyNameInfo",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": true,
+                            "options": {
+                                "text": "Friendly names make it easier for end-users to identify resources they have been assigned.",
+                                "uri": "https://docs.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries#scaling",
+                                "style": "info"
+                            }
+                        },                                      
+                        {
+                            "name": "workspaceFriendlyName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Workspace name",
+                            "placeholder": "Example: Finance Applications",
+                            "defaultValue": "",
+                            "toolTip": "This name is visible to users and is how applications will be grouped in the AVD user interface.",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "sessionHostFriendly",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Desktop name",
+                            "defaultValue": "",
+                            "placeholder": "Example: My Desktop",
+                            "toolTip": "This name is visible to users and is the name of the desktop.",
+                            "constraints": {
+                                "required": true,
+                                "regex": "",
+                                "validationMessage": ""
+                            },
+                            "visible": true
+                        },                        
 						{
 						"name": "hostPoolSection",
 						"type": "Microsoft.Common.Section",
-						"label": "AVD Hostpool",
+						"label": "Host Pool Type ",
                         "visible": true,
-						"elements": [
-                            {
-                                "name": "hostPoolName",
-                                "type": "Microsoft.Common.TextBox",
-                                "label": "Host Pool Name (Visible in Azure)",
-                                "defaultValue": "",
-                                "placeholder": "Example: avd-graphicdesign-hostpool",
-                                "toolTip": "A host pool is a collection of virtual machines deployed from the same base image.",
-                                "constraints": {
-                                    "required": true,
-                                    "regex": "",
-                                    "validationMessage": ""
-                                },
-                                "visible": true
-                            },
-                            {
-                                "name": "hostPoolNameFriendly",
-                                "type": "Microsoft.Common.TextBox",
-                                "label": "Friendly Name (Visible to users)",
-                                "placeholder": "Example: GPU Desktop",
-                                "defaultValue": "",
-                                "toolTip": "",
-                                "constraints": {
-                                    "required": true,
-                                    "regex": "",
-                                    "validationMessage": ""
-                                },
-                                "visible": true
-                            },                            
+						"elements": [                          
                             {
                                 "name": "hostPoolType",
                                 "type": "Microsoft.Common.DropDown",
-                                "label": "Host Pool Type",
+                                "label": "Host pool type",
                                 "defaultValue": "Pooled",
                                 "multiLine": true,
                                 "toolTip": "",
@@ -129,7 +180,7 @@
                             {
                                 "name": "loadBalancer",
                                 "type": "Microsoft.Common.DropDown",
-                                "label": "Load Balancer",
+                                "label": "Load balancer",
                                 "defaultValue": "DepthFirst",
                                 "multiLine": true,
                                 "toolTip": "Breadth-first load balancing distributes new user sessions across all available session hosts in the host pool. Depth-first load balancing distributes new user sessions to an available session host with the highest number of connections but has not reached its maximum session limit threshold.",
@@ -153,7 +204,7 @@
                             {
                                 "name": "maxSessions",
                                 "type": "Microsoft.Common.TextBox",
-                                "label": "Max Sessions",
+                                "label": "Max sessions",
                                 "defaultValue": "4",
                                 "toolTip": "The maximum number of users that have concurrent sessions on a session host. When setting a host pool to have depth first load balancing or planning to use Autoscaling, you must set an appropriate max session limit according to the configuration of your deployment and capacity of your VMs.",
                                 "constraints": {
@@ -166,7 +217,7 @@
                             {
                                 "name": "assignmentType",
                                 "type": "Microsoft.Common.DropDown",
-                                "label": "Machine Assignment",
+                                "label": "Machine assignment",
                                 "defaultValue": "Automatic (Recommended)",
                                 "multiLine": true,
                                 "toolTip": "Automatic assignment – The service will select an available host and assign it to an user. Direct assignment – Admin selects a specific host to assign to an user.",
@@ -190,7 +241,7 @@
                             {
                                 "name": "startVmOnConnect",
                                 "type": "Microsoft.Common.OptionsGroup",
-                                "label": "Start On Connect",
+                                "label": "Start on connect",
                                 "defaultValue": "Yes (Recommended)",
                                 "toolTip": "If powered off, start VM once user connects. ",
                                 "constraints": {
@@ -211,7 +262,7 @@
                             {
                                 "name": "createVmRole",
                                 "type": "Microsoft.Common.OptionsGroup",
-                                "label": "Create Start VM on Connect Role",
+                                "label": "Create start VM on connect role",
                                 "defaultValue": "Yes (Required if using Start On Connect)",
                                 "toolTip": "Create custom Azure IAM role for Start VM on Connect",
                                 "constraints": {
@@ -1563,8 +1614,6 @@
             "parameters": {
                 "avdResourceGroup": "[steps('basics').resourceScope.resourceGroup.name]",
                 "location": "[steps('basics').resourceScope.location]",
-                "workspaceName": "[steps('AVDLandingZone').workspaceSection.workspaceName]",
-                "hostPoolName": "[steps('AVDLandingZone').hostPoolSection.hostPoolName]",
                 "hostPoolType": "[steps('AVDLandingZone').hostPoolSection.hostPoolType]",
                 "loadBalancer": "[steps('AVDLandingZone').hostPoolSection.loadBalancer]",
                 "maxSessions": "[steps('AVDLandingZone').hostPoolSection.maxSessions]",
