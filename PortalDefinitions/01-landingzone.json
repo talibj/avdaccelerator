@@ -37,7 +37,7 @@
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Resource naming",
                             "defaultValue": "Simple (Recommended)",
-                            "toolTip": "If powered off, start VM once user connects. ",
+                            "toolTip": "",
                             "constraints": {
                                 "required": false,
                                 "allowedValues": [
@@ -1595,45 +1595,7 @@
                                 ]
                             },
                             "visible": true
-                        },
-                        {
-                            "name": "installSSL",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Install SSL Certificate in Image",
-                            "defaultValue": "false",
-                            "toolTip": "",
-                            "constraints": {
-                                "required": false,
-                                "allowedValues": [
-                                    {
-                                        "label": "true",
-                                        "value": true
-                                    },
-                                    {
-                                        "label": "false",
-                                        "value": false
-                                    }
-                                ]
-                            },
-                            "visible": true
-                        },
-                        {
-                            "name": "keyVault",
-                            "label": "AVD Key Vault",
-                            "type": "Microsoft.Common.Section",
-                            "visible": "[equals(steps('Images').installSSL, true)]",
-                            "elements": [ 
- 
-                                {
-                                    "name": "keyvaultCertInstall",
-                                    "type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
-                                    "visible": "[equals(steps('Images').installSSL, true)]",
-                                    "toolTip": "Select certificate",
-                                    "label": "KeyVault certificates selection"
-                                    }
-                            ]
                         }
-				
                     ]
                 }                								
             ]
