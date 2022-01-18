@@ -1611,9 +1611,7 @@
                 "startVmOnConnect": "[steps('AVDLandingZone').hostPoolSection.startVmOnConnect]",
                 "createVmRole": "[steps('AVDLandingZone').hostPoolSection.createVmRole]",
                 "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
-                "fileBackup": "[steps('AVDNetwork').fileBackup]",
-                "keyVaultName": "[steps('Images').keyVault.keyvaultCertInstall.name]",
-                "keyVaultId": "[steps('Images').keyVault.keyvaultCertInstall.id]"
+                "fileBackup": "[steps('AVDNetwork').fileBackup]"
             },
             "kind": "ResourceGroup"
         }
