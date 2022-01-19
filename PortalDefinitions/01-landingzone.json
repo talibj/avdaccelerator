@@ -1259,6 +1259,21 @@
                             }
                         },
 						{
+							"name": "profileShareSize",
+							"type": "Microsoft.Common.Slider",
+							"min": 1,
+							"max": 20,
+							"label": "File Share Size",
+							"defaultValue": 1,
+                            "subLabel": "x 100GB",
+							"showStepMarkers": true,
+							"toolTip": "Size of Premium File share in 100GB increments",
+							"constraints": {
+								"required": true
+							},
+							"visible": true
+						},                        
+						{
                            "name": "fileBackup",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Enable Azure Backup for User Profile Data",
@@ -1407,7 +1422,118 @@
                                 ]
                             },
                             "visible": true
-                        },						
+                        },
+                        {
+                            "name": "fslProfCustomization",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "FSLogix Profile Container",
+                            "multiselect": true,
+                            "selectAll": true,
+                            "defaultValue": "Select all",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "Container Naming: Username followed by SID",
+                                        "value": {
+                                            "name": "namesid",
+											"scriptType": "uri",
+											"scriptLocation": "https://aka.ms/avdgpo"
+                                        }
+                                    },
+                                    {
+                                        "label": "Virtual Disk Type: VHDX",
+                                        "value": {
+                                            "name": "vhdx",
+											"scriptType": "uri",
+											"scriptLocation": "https://aka.ms/avdgpo"
+                                        }
+                                    },									
+                                    {
+                                        "label": "Delete Local Profile when FSLogix Profile Should Apply",
+                                        "value": {
+                                            "name": "fsldeleteprof",
+											"scriptType": "inline"
+                                        }
+                                    },
+                                    {
+                                        "label": "Prevent Login with Failure",
+                                        "value": {
+                                            "name": "logindeny",
+											"scriptType": "inline"
+                                        }
+                                    },
+                                    {
+                                        "label": "Prevent Login with Temporary Profile",
+                                        "value": {
+                                            "name": "tempprof",
+											"scriptType": "inline"
+                                        }
+                                    }									
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "fslCustomization",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "FSLogix Office Container",
+                            "multiselect": true,
+                            "selectAll": true,
+                            "defaultValue": "Select all",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "Include Office in Cache",
+                                        "value": {
+                                            "name": "ocache",
+											"scriptType": "uri",
+											"scriptLocation": "https://aka.ms/avdgpo"
+                                        }
+                                    },
+                                    {
+                                        "label": "Include Outlook in Cache",
+                                        "value": {
+                                            "name": "outcache",
+											"scriptType": "uri",
+											"scriptLocation": "https://aka.ms/avdgpo"
+                                        }
+                                    },									
+                                    {
+                                        "label": "Include Teams in Cache",
+                                        "value": {
+                                            "name": "teamscache",
+											"scriptType": "inline"
+                                        }
+                                    },
+                                    {
+                                        "label": "Include Search Database in Cache",
+                                        "value": {
+                                            "name": "searchcache",
+											"scriptType": "inline"
+                                        }
+                                    },
+                                    {
+                                        "label": "Include OneNote in Cache",
+                                        "value": {
+                                            "name": "onenotecache",
+											"scriptType": "inline"
+                                        }
+                                    },
+                                    {
+                                        "label": "Include OneDrive in Cache",
+                                        "value": {
+                                            "name": "onedrivecache",
+											"scriptType": "inline"
+                                        }
+                                    }	                                    									
+                                ]
+                            },
+                            "visible": true
+                        },                                                 						
                         {
                             "name": "imageRegionReplicas",
                             "type": "Microsoft.Common.DropDown",
