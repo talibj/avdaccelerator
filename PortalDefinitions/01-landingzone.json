@@ -1271,7 +1271,7 @@
 							"constraints": {
 								"required": true
 							},
-							"visible": true
+							"visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
 						},                        
 						{
                            "name": "fileBackup",
