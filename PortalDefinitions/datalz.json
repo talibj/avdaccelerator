@@ -1,20 +1,52 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "$schema": "<relative path to createFormUI.schema.json>",
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "AVD Image Build Solution Accelerator",
+            "title": "Data Management & Analytics Scenario - Data Product Batch",
             "steps": [
                 {
                     "name": "basics",
-                    "label": "Azure Image Builder",
+                    "label": "Data Product",
                     "elements": [
+                        {
+                            "name": "infoBoxDataManagementAnalytics",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": true,
+                            "options": {
+                                "text": "Data Management & Analytics Scenario is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
+                                "style": "Info",
+                                "uri": "https://aka.ms/adopt/datamanagement"
+                            }
+                        },
                         {
                             "name": "deploymentDetails",
                             "label": "Deployment Details",
                             "type": "Microsoft.Common.Section",
                             "visible": true,
                             "elements": [
+                                {
+                                    "name": "deploymentDetailsText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select the subscription and resource group as well as the location to specify the scope of your Data Product deployment.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "infoBoxPrerequisites",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Please make sure that you have a Data Management Landing Zone and Data Landing Zone deployed before deploying a Data Product or Data Integration template.",
+                                        "style": "Warning",
+                                        "uri": "https://github.com/Azure/data-management-zone"
+                                    }
+                                },
                                 {
                                     "name": "subscriptionApi",
                                     "type": "Microsoft.Solutions.ArmApiControl",
@@ -49,6 +81,15 @@
                                     }
                                 },
                                 {
+                                    "name": "infoBoxResourceGroup",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "We have already deployed a few resource groups in your Data Landing Zone, which can be used for Data Product and Data Integration Template deployments. They have the following names: '{prefix}-dp001', '{prefix}-dp002', '{prefix}-di001' and '{prefix}-di002'.",
+                                        "style": "Info"
+                                    }
+                                },
+                                {
                                     "name": "resourceGroupId",
                                     "label": "Resource Group",
                                     "type": "Microsoft.Common.DropDown",
@@ -63,6 +104,15 @@
                                     "constraints": {
                                         "allowedValues": "[map(steps('basics').deploymentDetails.resourceGroupApi.value, (item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Subscription ID: ', last(take(split(item.id, '/'), 3)), '\"}')))]",
                                         "required": true
+                                    }
+                                },
+                                {
+                                    "name": "infoBoxLocation",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Since not all service features are available in all regions, this deployment is available in a subset of regions.",
+                                        "style": "Info"
                                     }
                                 },
                                 {
@@ -86,38 +136,466 @@
                                     "filterPlaceholder": "Filter items ...",
                                     "multiLine": true,
                                     "constraints": {
-                                        "allowedValues": "[map(filter(steps('basics').deploymentDetails.locationsApi.value,(item) => contains(split('eastus, eastus2,westcentralus,westus,westus2,westus3,southcentralus,northeurope,westeurope,southeastasia,australiasoutheast,australiaeast,uksouth,ukwest', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
+                                        "allowedValues": "[map(filter(steps('basics').deploymentDetails.locationsApi.value,(item) => contains(split('southafricanorth,australiaeast,centralindia,japaneast,southeastasia,southindia,canadacentral,francecentral,germanywestcentral,northeurope,uksouth,westeurope,brazilsouth,centralus,eastus,eastus2,southcentralus,westcentralus,westus2', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
                                         "required": true
                                     }
                                 }
                             ]
                         },
                         {
-                            "name": "managedIdentityName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Managed Identity Name",
-                            "defaultValue": "",
-                            "toolTip": "Name for managed identity used for Azure Image Builder",
-                            "constraints": {
-                                "required": true,
-                                "regex": "",
-                                "validationMessage": ""
-                            },
-                            "visible": true
+                            "name": "dataProductName",
+                            "label": "Data Product Name",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "dataPruductNamesText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify a prefix and select an environment (Development, Test, Production) which will both be used as a prefix for all resource names. Independent of the environment, the same resources get deployed.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "environment",
+                                    "label": "Environment",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": true,
+                                    "defaultValue": "Development",
+                                    "toolTip": "Select the environment for the deployment. This is currently only used for the naming of resources.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Development",
+                                                "description": "Select if you want to deploy a development environment.",
+                                                "value": "dev"
+                                            },
+                                            {
+                                                "label": "Test",
+                                                "description": "Select if you want to deploy a test environment.",
+                                                "value": "tst"
+                                            },
+                                            {
+                                                "label": "Production",
+                                                "description": "Select if you want to deploy a production environment.",
+                                                "value": "prd"
+                                            }
+                                        ],
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "dataProductPrefix",
+                                    "label": "Data Product Prefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "visible": true,
+                                    "defaultValue": "",
+                                    "toolTip": "Specify a prefix (min 1 and max 10 lowercase characters and numbers).",
+                                    "constraints": {
+                                        "required": true,
+                                        "validations": [
+                                            {
+                                                "regex": "^[a-z0-9]{1,10}$",
+                                                "message": "The prefix must be between 1-10 lowercase characters and numbers."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('basics').dataProductName.keyVaultNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('basics').dataProductName.mariaDbServerNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('basics').dataProductName.mySqlServerNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('basics').dataProductName.postgresSqlServerNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('basics').dataProductName.sqlServerNameApi.available, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('basics').dataProductName.synapseNameApi.available, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "cosmosNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat('/providers/Microsoft.DocumentDB/databaseAccountNames/', steps('basics').dataProductName.dataProductPrefix, '-', steps('basics').dataProductName.environment, '-cosmos001', '?api-version=2021-04-15')]"
+                                    }
+                                },
+                                {
+                                    "name": "keyVaultNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.KeyVault/checkNameAvailability?api-version=2019-09-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('basics').dataProductName.dataProductPrefix, '-', steps('basics').dataProductName.environment, '-vault001')]",
+                                            "type": "Microsoft.KeyVault/vaults"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "mariaDbServerNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.DBforMariaDB/checkNameAvailability?api-version=2018-06-01-preview')]",
+                                        "body": {
+                                            "name": "[concat(steps('basics').dataProductName.dataProductPrefix, '-', steps('basics').dataProductName.environment, '-mariadb001')]",
+                                            "type": "Microsoft.DBforMariaDB"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "mySqlServerNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.DBforMySQL/checkNameAvailability?api-version=2017-12-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('basics').dataProductName.dataProductPrefix, '-', steps('basics').dataProductName.environment, '-mysqlserver001')]",
+                                            "type": "Microsoft.DBforMySQL"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "postgresSqlServerNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.DBforPostgreSQL/checkNameAvailability?api-version=2017-12-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('basics').dataProductName.dataProductPrefix, '-', steps('basics').dataProductName.environment, '-postgresql001')]",
+                                            "type": "Microsoft.DBforPostgreSQL"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "sqlServerNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.Sql/checkNameAvailability?api-version=2021-02-01-preview')]",
+                                        "body": {
+                                            "name": "[concat(steps('basics').dataProductName.dataProductPrefix, '-', steps('basics').dataProductName.environment, '-sqlserver001')]",
+                                            "type": "Microsoft.Sql/servers"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "synapseNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.Synapse/checkNameAvailability?api-version=2021-03-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('basics').dataProductName.dataProductPrefix, '-', steps('basics').dataProductName.environment, '-synapse001')]",
+                                            "type": "Microsoft.Synapse/workspaces"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "generalSettings",
+                    "label": "General Settings",
+                    "subLabel": {
+                        "preValidation": "Provide settings for your data product deployment.",
+                        "postValidation": "Done"
+                    },
+                    "bladeTitle": "General Settings",
+                    "bladeSubtitle": "General Settings",
+                    "elements": [
+                        {
+                            "name": "dataProcessingServiceDeploymentSettings",
+                            "label": "Data Processing Service Deployment Settings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "infoBoxProcessingService",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select a processing engine that you want to deploy as part of the Data Product. The service can not only be used as an additional data processing engine, but also as a workflow orchestration engine to orchestrate and trigger workflows and pipelines within Machine Learning.",
+                                        "style": "Info"
+                                    }
+                                },
+                                {
+                                    "name": "processingService",
+                                    "label": "Create Data Processing Service",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": true,
+                                    "defaultValue": "Data Factory",
+                                    "toolTip": "Specify an additional data processing engine that you want to deploy. This can be used as Spark engine as well as for workflow orchestration.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Data Factory",
+                                                "description": "Select if you want to deploy a Data Factory.",
+                                                "value": "dataFactory"
+                                            },
+                                            {
+                                                "label": "Synapse",
+                                                "description": "Select if you want to deploy a Synapse workspace.",
+                                                "value": "synapse"
+                                            }
+                                        ],
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "synapseDefaultStorageAccountApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.Storage/storageAccounts?api-version=2021-04-01')]"
+                                    }
+                                },
+                                {
+                                    "name": "infoBoxSynapseDefaultStorageAccount",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": "[equals(steps('generalSettings').dataProcessingServiceDeploymentSettings.processingService, 'synapse')]",
+                                    "options": {
+                                        "text": "We are recommending to use a dedicated container per Data Product in the workspace Data Lake and per Data Integration in the Raw as well as Enriched & Curated Data Lake. Please select the respective Data Lake in your Data Landing Zone (e.g. Raw - '{prefix}{environment}raw', Enriched & Curated - '{prefix}{environment}encur', Workspace - '{prefix}{environment}work') and select one of the pre-existing storage account containers (e.g. 'di001', 'di002', 'dp001', 'dp002') or create and select a new one for this deployment if all of them are already in use.",
+                                        "style": "Info"
+                                    }
+                                },
+                                {
+                                    "name": "synapseDefaultStorageAccountId",
+                                    "label": "Storage Account",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('generalSettings').dataProcessingServiceDeploymentSettings.processingService, 'synapse')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Select the Storage account to which you want to connect Synapse.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('generalSettings').dataProcessingServiceDeploymentSettings.synapseDefaultStorageAccountApi.value,(item) => and(equals(item.location, steps('basics').deploymentDetails.locationName), equals(item.properties.isHnsEnabled, true))),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "synapseDefaultStorageAccountFileSystemApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('generalSettings').dataProcessingServiceDeploymentSettings.synapseDefaultStorageAccountId, '/blobServices/default/containers?api-version=2021-04-01')]"
+                                    }
+                                },
+                                {
+                                    "name": "synapseDefaultStorageAccountFileSystemId",
+                                    "label": "Synapse Default Storage Account Container",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('generalSettings').dataProcessingServiceDeploymentSettings.processingService, 'synapse')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Default storage container for the Synapse workspace. If no option is shown, please make sure that a container exists within the storage account selected above.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(steps('generalSettings').dataProcessingServiceDeploymentSettings.synapseDefaultStorageAccountFileSystemApi.value, (item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "enableSqlPool",
+                                    "label": "Enable SQL Pool",
+                                    "type": "Microsoft.Common.CheckBox",
+                                    "visible": "[equals(steps('generalSettings').dataProcessingServiceDeploymentSettings.processingService, 'synapse')]",
+                                    "defaultValue": false,
+                                    "toolTip": "Enable the deployment of an Azure SQL Pool (DW100).",
+                                    "constraints": {
+                                        "required": false,
+                                        "validationMessage": "Enable the deployment of an Azure SQL Pool (DW100)."
+                                    }
+                                }
+                            ]
                         },
                         {
-                            "name": "computeGalleryName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Compute Gallery Name",
-                            "defaultValue": "",
-                            "toolTip": "Name for Azure Compute Gallery",
-                            "constraints": {
-                                "required": true,
-                                "regex": "",
-                                "validationMessage": ""
-                            },
-                            "visible": true
-                        }				
+                            "name": "dataGovernanceSettings",
+                            "label": "Data Governance Settings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "dataGovernanceSettingsText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select the Purview account to which you want to connect the Synapse workspace.",
+                                        "link": {
+                                            "label": "Learn more",
+                                            "uri": "https://docs.microsoft.com/en-us/azure/purview/overview"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "purviewId",
+                                    "label": "Connect to Purview Account",
+                                    "type": "Microsoft.Solutions.ResourceSelector",
+                                    "visible": true,
+                                    "defaultValue": "",
+                                    "toolTip": "Select the Purview account to which you want to connect the Synapse workspace.",
+                                    "resourceType": "Microsoft.Purview/accounts",
+                                    "required": true,
+                                    "options": {
+                                        "filter": {
+                                            "subscription": "all",
+                                            "location": "all"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "purviewApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('generalSettings').dataGovernanceSettings.purviewId.id, '?api-version=2021-07-01')]"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "name": "generalSettings",
+                            "label": "General Settings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "generalSettingsText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify general settings for this deployment.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "sqlFlavour",
+                                    "label": "SQL Flavour",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": true,
+                                    "defaultValue": "SQL Server",
+                                    "toolTip": "Select the SQL flavour that should be deployed as part of this deployment.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "None (No SQL Server will be deployed)",
+                                                "value": "none"
+                                            },
+                                            {
+                                                "label": "SQL Server",
+                                                "value": "sql"
+                                            },
+                                            {
+                                                "label": "MySQL Server",
+                                                "value": "mysql"
+                                            },
+                                            {
+                                                "label": "PostgreSQL Server",
+                                                "value": "postgre"
+                                            },
+                                            {
+                                                "label": "MariaDB Server",
+                                                "value": "maria"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "administratorPassword",
+                                    "label": {
+                                        "password": "Password",
+                                        "confirmPassword": "Confirm password"
+                                    },
+                                    "type": "Microsoft.Common.PasswordBox",
+                                    "visible": "[not(and(equals(steps('generalSettings').generalSettings.sqlFlavour, 'none'), equals(steps('generalSettings').dataProcessingServiceDeploymentSettings.processingService, 'dataFactory')))]",
+                                    "toolTip": "Specify an administrator password for the SQL Server and Synapse workspace, if you have selected Synapse as processing sercice.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
+                                        "validationMessage": "The password must be alphanumeric, contain at least 8 characters, and have at least 1 letter, 1 number and one special character."
+                                    },
+                                    "options": {
+                                        "hideConfirmation": false
+                                    }
+                                },
+                                {
+                                    "name": "enableCosmos",
+                                    "label": "Enable Azure Cosmos DB",
+                                    "type": "Microsoft.Common.CheckBox",
+                                    "visible": true,
+                                    "defaultValue": false,
+                                    "toolTip": "Enable the deployment of Azure Cosmos DB.",
+                                    "constraints": {
+                                        "required": false,
+                                        "validationMessage": "Enable the deployment of Azure Cosmos DB."
+                                    }
+                                },
+                                {
+                                    "name": "infoBoxRoleAssignment",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "The role assignment is optional and will assign the Synapse MSI to the respective selected default Storage Account Container (Storage Blob Data Contributor).",
+                                        "style": "Info"
+                                    }
+                                },
+                                {
+                                    "name": "enableRoleAssignments",
+                                    "label": "Enable role assignments",
+                                    "type": "Microsoft.Common.CheckBox",
+                                    "visible": true,
+                                    "defaultValue": false,
+                                    "toolTip": "Enable role assignments.",
+                                    "constraints": {
+                                        "required": false,
+                                        "validationMessage": "Enable role assignments of the Synapse MSI. Please read infobox above for more details."
+                                    }
+                                }
+                            ]
+                        }
                     ]
                 },
                 {
@@ -136,37 +614,25 @@
                             "type": "Microsoft.Common.Section",
                             "visible": true,
                             "elements": [
-								{
-									"name": "aibVnetInject",
-									"type": "Microsoft.Common.OptionsGroup",
-									"label": "Use existing VNet for Azure Image Builder",
-									"defaultValue": "false",
-									"toolTip": "",
-									"constraints": {
-										"required": false,
-										"allowedValues": [
-											{
-												"label": "true",
-												"value": true
-											},
-											{
-												"label": "false",
-												"value": false
-											}
-										]
-									},
-									"visible": true
-								},
                                 {
                                     "name": "virtualNetworkText",
                                     "type": "Microsoft.Common.TextBlock",
-                                    "visible": "[equals(steps('connectivitySettings').virtualNetwork.aibVnetInject, true)]",
+                                    "visible": true,
                                     "options": {
                                         "text": "Select the Virtual Network and Subnet for your deployment.",
                                         "link": {
                                             "label": "",
                                             "uri": ""
                                         }
+                                    }
+                                },
+                                {
+                                    "name": "infoBoxVirtualNetwork",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Please select the Virtual Network of your Data Landing Zone and select a free Subnet within the Virtual Network to make sure that you have proper outbound connectivity as well as DNS name resolution in place. The subnet must have 'privateEndpointNetworkPolicies' and 'privateLinkServiceNetworkPolicies' set to disabled. This is already pre-configured for you in the DataProduct and DataIntegration subnets in the Data Landing Zone Vnet.",
+                                        "style": "Info"
                                     }
                                 },
                                 {
@@ -181,7 +647,7 @@
                                     "name": "virtualNetworkId",
                                     "label": "Virtual Network",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": "[equals(steps('connectivitySettings').virtualNetwork.aibVnetInject, true)]",
+                                    "visible": true,
                                     "defaultValue": "",
                                     "toolTip": "Select the Virtual Network for your Data Product.",
                                     "multiselect": false,
@@ -206,7 +672,7 @@
                                     "name": "subnetId",
                                     "label": "Subnet",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": "[equals(steps('connectivitySettings').virtualNetwork.aibVnetInject, true)]",
+                                    "visible": true,
                                     "defaultValue": "",
                                     "toolTip": "Select the Subnet for your Data Product. The subnet must have 'privateEndpointNetworkPolicies' and 'privateLinkServiceNetworkPolicies' set to disabled.",
                                     "multiselect": false,
@@ -215,366 +681,321 @@
                                     "filterPlaceholder": "Filter items ...",
                                     "multiLine": true,
                                     "constraints": {
-                                        "allowedValues": "[map(filter(steps('connectivitySettings').virtualNetwork.subnetApi.value,(item) => and(equals(item.properties.privateEndpointNetworkPolicies, 'Disabled'), equals(item.properties.privateLinkServiceNetworkPolicies, 'Disabled'), lessOrEquals(int(last(split(item.properties.addressPrefix, '/'))), 27))),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').virtualNetwork.subnetApi.value,(item) => and(equals(item.properties.privateEndpointNetworkPolicies, 'Disabled'), lessOrEquals(int(last(split(item.properties.addressPrefix, '/'))), 27))),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "name": "privateDnsZones",
+                            "label": "Private DNS Zones",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "privateDnsZonesText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select the Private DNS Zone settings for your deployment.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "infoBoxPrivateDnsZone",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "We are deploying all services with private endpoints and disabled public network access to reduce the data exfiltration risk. For each private endpoint, DNS A-records need to be created in a Private DNS Zones. Therefore, these either need to deployed through Azure Policies or you have to provide the Private DNS Zones that should be used for this deployment. We are assuming that all Private DNS Zones are created in the same subscription. Deploying DNS A-Records through Private Endpoints is the recommended solution.",
+                                        "style": "Info",
+                                        "uri": "https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale"
+                                    }
+                                },
+                                {
+                                    "name": "automatedPrivateDnsZoneGroups",
+                                    "label": "DNS A-Records are deployed through Azure Policy",
+                                    "type": "Microsoft.Common.OptionsGroup",
+                                    "visible": true,
+                                    "toolTip": "If 'Yes' is selected, Private DNS Zone Groups will not be deployed and we are assuming that this gets created through Azure Policies. If this does not get created, you will not be able to access any resources within this environment.",
+                                    "defaultValue": "No",
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "No",
+                                                "value": "no"
+                                            },
+                                            {
+                                                "label": "Yes",
+                                                "value": "yes"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "subscriptionApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "subscriptions?api-version=2020-01-01"
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZonesSub",
+                                    "label": "Subscription with Private DNS Zones",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Select the Subscription of your Private DNS Zones. If you have deployed the Data Management Landing Zone with a Firewall and Private DNS Zones then select the subscription that you have used for your Data Management Landing Zone.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(steps('connectivitySettings').privateDnsZones.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZonesApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('connectivitySettings').privateDnsZones.privateDnsZonesSub, '/providers/Microsoft.Network/privateDnsZones?api-version=2018-09-01')]"
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdKeyVault",
+                                    "label": "Private DNS Zone Key Vault (privatelink.vaultcore.azure.net)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for Key Vault (privatelink.vaultcore.azure.net).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.vaultcore.azure.net')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdSynapseDev",
+                                    "label": "Private DNS Zone Synapse Dev (privatelink.dev.azuresynapse.net)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for Synapse Dev (privatelink.dev.azuresynapse.net).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.dev.azuresynapse.net')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdSynapseSql",
+                                    "label": "Private DNS Zone Synapse Sql (privatelink.sql.azuresynapse.net)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for Synapse Sql (privatelink.sql.azuresynapse.net).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.sql.azuresynapse.net')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdDataFactory",
+                                    "label": "Private DNS Zone DataFactory (privatelink.datafactory.azure.net)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for DataFactory (privatelink.datafactory.azure.net).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.datafactory.azure.net')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdDataFactoryPortal",
+                                    "label": "Private DNS Zone DataFactory Portal (privatelink.adf.azure.com)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for DataFactory Portal (privatelink.adf.azure.com).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.adf.azure.com')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdCosmosdbSql",
+                                    "label": "Private DNS Zone Cosmos SQL (privatelink.documents.azure.com)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for Cosmos SQL (privatelink.documents.azure.com).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.documents.azure.com')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdSqlServer",
+                                    "label": "Private DNS Zone SQL Server (privatelink.database.windows.net)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for SQL Server (privatelink.database.windows.net).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.database.windows.net')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdMySqlServer",
+                                    "label": "Private DNS Zone MySQL Server (privatelink.mysql.database.azure.com)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for MySQL Server (privatelink.mysql.database.azure.com).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.mysql.database.azure.com')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdMariaDb",
+                                    "label": "Private DNS Zone MariaDB Server (privatelink.mariadb.database.azure.com)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for MariaDB Server (privatelink.mariadb.database.azure.com).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.mariadb.database.azure.com')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZoneIdPostgreSql",
+                                    "label": "Private DNS Zone PostgreSQL Server (privatelink.postgres.database.azure.com)",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Private DNS Zone for PostgreSQL Server (privatelink.postgres.database.azure.com).",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.postgres.database.azure.com')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
                                         "required": true
                                     }
                                 }
                             ]
                         }
                     ]
-                },													
+                },
                 {
-                    "name": "Images",
-                    "label": "Image Customization",
-                    "elements": [			
+                    "name": "tags",
+                    "label": "Tags",
+                    "subLabel": {
+                        "preValidation": "Provide tags that will be used for all resources.",
+                        "postValidation": "Done"
+                    },
+                    "bladeTitle": "Tags",
+                    "bladeSubtitle": "Tags",
+                    "elements": [
                         {
-                            "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope",
-                            "location": {
-                                "label": "Region",
-                                "toolTip": "Azure region",
-                                "resourceTypes": [],
-                                "allowedValues": [
-									"eastus",
-									"eastus2",
-									"westcentralus",
-									"westus",
-									"westus2",
-									"westus3",
-									"southcentralus",
-									"northeurope",
-									"westeurope",
-									"southeastasia",
-									"australiasoutheast",
-									"australiaeast",
-									"uksouth",
-									"ukwest"
-                                ]
-                            }
-                        },							
-                        {
-                            "name": "buildImages",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Images to Build",
-                            "multiselect": true,
-                            "selectAll": true,
-                            "defaultValue": "Select all",
-                            "toolTip": "",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "Win10 Enterprise 20H2",
-                                        "value": {
-                                            "name": "Windows10_20H2",
-                                            "osType": "Windows",
-                                            "osState": "Generalized",
-                                            "offer": "Windows-10",
-                                            "publisher": "MicrosoftWindowsDesktop",
-                                            "sku": "20h2-evd"
-                                        }
-                                    },
-                                    {
-                                        "label": "Win10 Enterprise 20H2 + M365",
-                                        "value": {
-                                            "name": "Windows10_20H2_Office",
-                                            "osType": "Windows",
-                                            "osState": "Generalized",
-                                            "offer": "office-365",
-                                            "publisher": "MicrosoftWindowsDesktop",
-                                            "sku": "20h2-evd-o365pp"
-                                        }
-                                    }
-                                ]
-                            },
-                            "visible": true
-                        },
-                        {
-                            "name": "imageCustomization",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Image Customizations",
-                            "multiselect": true,
-                            "selectAll": true,
-                            "defaultValue": "Select all",
-                            "toolTip": "",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "RDP Shortpath",
-                                        "value": {
-                                            "name": "New-NetFirewallRule -DisplayName 'Remote Desktop - Shortpath (UDP-In)'  -Action Allow -Description 'Inbound rule for the Remote Desktop service to allow RDP traffic. [UDP 3390]' -Group '@FirewallAPI.dll,-28752' -Name 'RemoteDesktop-UserMode-In-Shortpath-UDP'  -PolicyStore PersistentStore -Profile Domain, Private -Service TermService -Protocol udp -LocalPort 3390 -Program '%SystemRoot%\\system32\\svchost.exe' -Enabled:True",
-											"scriptType": "uri",
-											"scriptLocation": "https://aka.ms/avdgpo"
-                                        }
-                                    },
-                                    {
-                                        "label": "Screen Capture Protection",
-                                        "value": {
-                                            "name": "New-NetFirewallRule -DisplayName 'Remote Desktop - Shortpath (UDP-In)'  -Action Allow -Description 'Inbound rule for the Remote Desktop service to allow RDP traffic. [UDP 3390]' -Group '@FirewallAPI.dll,-28752' -Name 'RemoteDesktop-UserMode-In-Shortpath-UDP'  -PolicyStore PersistentStore -Profile Domain, Private -Service TermService -Protocol udp -LocalPort 3390 -Program '%SystemRoot%\\system32\\svchost.exe' -Enabled:True",
-											"scriptType": "uri",
-											"scriptLocation": "https://aka.ms/avdgpo"
-                                        }
-                                    },									
-                                    {
-                                        "label": "Disable Automatic Updates",
-                                        "value": {
-                                            "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU' /v NoAutoUpdate /t REG_DWORD /d 1 /f",
-											"scriptType": "inline"
-                                        }
-                                    },
-                                    {
-                                        "label": "Time Zone Redirection",
-                                        "value": {
-                                            "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services' /v fEnableTimeZoneRedirection /t REG_DWORD /d 1 /f",
-											"scriptType": "inline"
-                                        }
-                                    },
-                                    {
-                                        "label": "Disable Storage Sense",
-                                        "value": {
-                                            "name": "reg add 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy' /v 01 /t REG_DWORD /d 0 /f",
-											"scriptType": "inline"
-                                        }
-                                    }									
-                                ]
-                            },
-                            "visible": true
-                        },						
-                        {
-                            "name": "imageRegionReplicas",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Image Region Replicas",
-                            "defaultValue": "Select all",
-                            "multiselect": true,
-                            "selectAll": true,
-                            "filter": true,
-                            "toolTip": "",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "Australia Central",
-                                        "value": "australiacentral"
-                                    },
-                                    {
-                                        "label": "Australia Central 2",
-                                        "value": "australiacentral2"
-                                    },
-                                    {
-                                        "label": "Australia East",
-                                        "value": "australiaeast"
-                                    },
-                                    {
-                                        "label": "Australia Southeast",
-                                        "value": "australiasoutheast"
-                                    },
-                                    {
-                                        "label": "Brazil South",
-                                        "value": "brazilsouth"
-                                    },
-                                    {
-                                        "label": "Brazil Southeast",
-                                        "value": "brazilsoutheast"
-                                    },
-                                    {
-                                        "label": "Canada Central",
-                                        "value": "canadacentral"
-                                    },
-                                    {
-                                        "label": "Canada East",
-                                        "value": "canadaeast"
-                                    },
-                                    {
-                                        "label": "Central India",
-                                        "value": "centralindia"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    },
-                                    {
-                                        "label": "East Asia",
-                                        "value": "eastasia"
-                                    },
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "East US 2",
-                                        "value": "eastus2"
-                                    },
-                                    {
-                                        "label": "France Central",
-                                        "value": "francecentral"
-                                    },
-                                    {
-                                        "label": "France South",
-                                        "value": "francesouth"
-                                    },
-                                    {
-                                        "label": "Germany North",
-                                        "value": "germanynorth"
-                                    },
-                                    {
-                                        "label": "Germany West Central",
-                                        "value": "germanywestcentral"
-                                    },
-                                    {
-                                        "label": "Japan East",
-                                        "value": "japaneast"
-                                    },
-                                    {
-                                        "label": "Japan West",
-                                        "value": "japanwest"
-                                    },
-                                    {
-                                        "label": "Korea Central",
-                                        "value": "koreacentral"
-                                    },
-                                    {
-                                        "label": "Korea South",
-                                        "value": "koreasouth"
-                                    },
-                                    {
-                                        "label": "North Central US",
-                                        "value": "northcentralus"
-                                    },
-                                    {
-                                        "label": "North Europe",
-                                        "value": "northeurope"
-                                    },
-                                    {
-                                        "label": "Norway East",
-                                        "value": "norwayeast"
-                                    },
-                                    {
-                                        "label": "Norway West",
-                                        "value": "norwaywest"
-                                    },
-                                    {
-                                        "label": "South Africa North",
-                                        "value": "southafricanorth"
-                                    },
-                                    {
-                                        "label": "South Africa West",
-                                        "value": "southafricawest"
-                                    },
-                                    {
-                                        "label": "South Central US",
-                                        "value": "southcentralus"
-                                    },
-                                    {
-                                        "label": "South India",
-                                        "value": "southindia"
-                                    },
-                                    {
-                                        "label": "Southeast Asia",
-                                        "value": "southeastasia"
-                                    },
-                                    {
-                                        "label": "Sweden Central",
-                                        "value": "swedencentral"
-                                    },
-                                    {
-                                        "label": "Switzerland North",
-                                        "value": "switzerlandnorth"
-                                    },
-                                    {
-                                        "label": "Switzerland West",
-                                        "value": "switzerlandwest"
-                                    },
-                                    {
-                                        "label": "UAE Central",
-                                        "value": "uaecentral"
-                                    },
-                                    {
-                                        "label": "UAE North",
-                                        "value": "uaenorth"
-                                    },
-                                    {
-                                        "label": "UK South",
-                                        "value": "uksouth"
-                                    },
-                                    {
-                                        "label": "UK West",
-                                        "value": "ukwest"
-                                    },
-                                    {
-                                        "label": "West Central US",
-                                        "value": "westcentralus"
-                                    },
-                                    {
-                                        "label": "West Europe",
-                                        "value": "westeurope"
-                                    },
-                                    {
-                                        "label": "West India",
-                                        "value": "westindia"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "West US 2",
-                                        "value": "westus2"
-                                    },
-                                    {
-                                        "label": "West US 3",
-                                        "value": "westus3"
-                                    }
-                                ]
-                            },
-                            "visible": true
-                        },
-                        {
-                            "name": "installSSL",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Install SSL Certificate in Image",
-                            "defaultValue": "false",
-                            "toolTip": "",
-                            "constraints": {
-                                "required": false,
-                                "allowedValues": [
-                                    {
-                                        "label": "true",
-                                        "value": true
-                                    },
-                                    {
-                                        "label": "false",
-                                        "value": false
-                                    }
-                                ]
-                            },
-                            "visible": true
-                        },
-						{
-						"name": "keyVaultCertificateSelection",
-						"type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
-						"visible": "[equals(steps('Images').installSSL, true)]",
-						"toolTip": "Select certificate",
-						"label": "KeyVault certificates selection"
-						}						
+                            "name": "tagsByResource",
+                            "label": "Tags by Resource",
+                            "type": "Microsoft.Common.TagsByResource",
+                            "visible": true,
+                            "resources": [
+                                "DataManagementAnalytics"
+                            ]
+                        }
                     ]
-                }							
-            ],
-            "deployment": {
-                "parameters": {
-                    "managedIdentityName": "[steps('basics').managedIdentityName]",
-                    "computeGalleryName": "[steps('basics').computeGalleryName]",
-                    "imageRegionReplicas": "[steps('Images').imageRegionReplicas]"
-                },
-                "kind": "ResourceGroup",
-                "template": {
-                    "file": "<ARM deployment template relative path>"
-                },
-                "_dxContentPath": "view.properties.deployment"
-            },
-            "_dxContentPath": "view.properties"
+                }
+            ]
         },
-        "_dxContentPath": "view"
+        "outputs": {
+            "kind": "ResourceGroup",
+            "location": "[steps('basics').deploymentDetails.locationName]",
+            "resourceGroupId": "[steps('basics').deploymentDetails.resourceGroupId]",
+            "parameters": {
+                "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
+                "environment": "[if(empty(steps('basics').dataProductName.environment), '', steps('basics').dataProductName.environment)]",
+                "prefix": "[if(empty(steps('basics').dataProductName.dataProductPrefix), '', steps('basics').dataProductName.dataProductPrefix)]",
+                "sqlFlavour": "[if(empty(steps('generalSettings').generalSettings.sqlFlavour), '', steps('generalSettings').generalSettings.sqlFlavour)]",
+                "administratorPassword": "[if(empty(steps('generalSettings').generalSettings.administratorPassword), '', steps('generalSettings').generalSettings.administratorPassword)]",
+                "processingService": "[if(empty(steps('generalSettings').dataProcessingServiceDeploymentSettings.processingService), '', steps('generalSettings').dataProcessingServiceDeploymentSettings.processingService)]",
+                "synapseDefaultStorageAccountFileSystemId": "[if(empty(steps('generalSettings').dataProcessingServiceDeploymentSettings.synapseDefaultStorageAccountFileSystemId), '', steps('generalSettings').dataProcessingServiceDeploymentSettings.synapseDefaultStorageAccountFileSystemId)]",
+                "enableSqlPool": "[steps('generalSettings').dataProcessingServiceDeploymentSettings.enableSqlPool]",
+                "enableCosmos": "[steps('generalSettings').generalSettings.enableCosmos]",
+                "purviewId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewId.id)]",
+                "purviewManagedStorageId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewApi.properties.managedResources.storageAccount)]",
+                "purviewManagedEventHubId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewApi.properties.managedResources.eventHubNamespace)]",
+                "enableRoleAssignments": "[steps('generalSettings').generalSettings.enableRoleAssignments]",
+                "subnetId": "[if(empty(steps('connectivitySettings').virtualNetwork.subnetId), '', steps('connectivitySettings').virtualNetwork.subnetId)]",
+                "privateDnsZoneIdKeyVault": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault)]",
+                "privateDnsZoneIdSynapseDev": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapseDev), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapseDev)]",
+                "privateDnsZoneIdSynapseSql": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapseSql), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapseSql)]",
+                "privateDnsZoneIdDataFactory": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactory), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactory)]",
+                "privateDnsZoneIdDataFactoryPortal": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactoryPortal), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactoryPortal)]",
+                "privateDnsZoneIdCosmosdbSql": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdCosmosdbSql), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdCosmosdbSql)]",
+                "privateDnsZoneIdSqlServer": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSqlServer), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSqlServer)]",
+                "privateDnsZoneIdMySqlServer": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdMySqlServer), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdMySqlServer)]",
+                "privateDnsZoneIdMariaDb": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdMariaDb), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdMariaDb)]",
+                "privateDnsZoneIdPostgreSql": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdPostgreSql), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdPostgreSql)]",
+                "tags": "[if(not(contains(steps('tags').tagsByResource, 'DataManagementAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.DataManagementAnalytics)))]"
+            }
+        }
     }
 }
-
