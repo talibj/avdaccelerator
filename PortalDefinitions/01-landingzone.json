@@ -1139,7 +1139,86 @@
                                     }
                                 }
                             ]
+                        },
+
+
+                        {
+                            "name": "avdMonitoringPrompt",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Log Analytics Workspace",
+                            "defaultValue": "Existing",
+                            "toolTip": "Log workspace for collecting AVD monitoring metrics",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "New",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "Existing",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "subscriptionApi",
+                            "type": "Microsoft.Solutions.ArmApiControl",
+                            "request": {
+                                "method": "GET",
+                                "path": "subscriptions?api-version=2020-01-01"
+                            }
+                        },
+                        {
+                            "name": "logWorkspaceSub",
+                            "label": "Subscription with existing Log Analytics Workspace",
+                            "type": "Microsoft.Common.DropDown",
+                            "visible": "[equals(steps('hostPoolOptions').avdMonitoringPrompt, false)]",
+                            "defaultValue": "",
+                            "toolTip": "Select the subscription of your Log Analytics Workspace. It is common to have this centralized in a management subscription.",
+                            "multiselect": false,
+                            "selectAll": false,
+                            "filter": true,
+                            "filterPlaceholder": "Filter items ...",
+                            "multiLine": true,
+                            "constraints": {
+                                "allowedValues": "[map(steps('hostPoolOptions').subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "logworkspaceApi",
+                            "type": "Microsoft.Solutions.ArmApiControl",
+                            "request": {
+                                "method": "GET",
+                                "path": "[concat(steps('hostPoolOptions').logWorkspaceSub, '/providers/microsoft.operationalinsights/workspaces?api-version=2021-06-01')]"
+                            }
+                        },
+                        {
+                            "name": "logWorkspaceId",
+                            "label": "Private DNS Zone Azure Files (privatelink.file.core.windows.net)",
+                            "type": "Microsoft.Common.DropDown",
+                            "visible": "[equals(steps('hostPoolOptions').avdMonitoringPrompt, false)]",
+                            "defaultValue": "",
+                            "toolTip": "Log Analytics Workspace",
+                            "multiselect": false,
+                            "selectAll": false,
+                            "filter": true,
+                            "filterPlaceholder": "Filter items ...",
+                            "multiLine": true,
+                            "constraints": {
+                                "allowedValues": "[map(filter(steps('hostPoolOptions').logworkspaceApi.value,(item) => contains(item.name)),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                "required": true
+                            }
                         }
+
+
+
+
+
+
                     ]
                 },
                 {
