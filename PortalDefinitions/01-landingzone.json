@@ -30,7 +30,7 @@
                 },
                 {
                     "name": "AVDLandingZone",
-                    "label": "Components",
+                    "label": "AVD components",
                     "elements": [
                         {
                             "name": "avdNaming",
@@ -334,7 +334,7 @@
                 },
                 {
                     "name": "hostPoolOptions",
-                    "label": "Host pool settings",
+                    "label": "Client settings and monitoring",
                     "elements": [
                         {
                             "name": "sessionAdjust",
@@ -1140,8 +1140,16 @@
                                 }
                             ]
                         },
-
-
+                        {
+                            "name": "monitoringInfoBox",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": true,
+                            "options": {
+                                "text": "Azure Monitor for virtual desktops enables granular collection and visualization of performance, utilization, client information, latency, and errors generated across your AVD environment. This requires log data to be sent to a Log Analytics workspace.",
+                                "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/azure-monitor",
+                                "style": "info"
+                            }
+                        },  
                         {
                             "name": "avdMonitoringPrompt",
                             "type": "Microsoft.Common.OptionsGroup",
@@ -1198,7 +1206,7 @@
                         },
                         {
                             "name": "logWorkspaceId",
-                            "label": "Private DNS Zone Azure Files (privatelink.file.core.windows.net)",
+                            "label": "Log Analytics Workspace",
                             "type": "Microsoft.Common.DropDown",
                             "visible": "[equals(steps('hostPoolOptions').avdMonitoringPrompt, false)]",
                             "defaultValue": "",
@@ -1209,21 +1217,15 @@
                             "filterPlaceholder": "Filter items ...",
                             "multiLine": true,
                             "constraints": {
-                                "allowedValues": "[map(filter(steps('hostPoolOptions').logworkspaceApi.value,(item) => contains(item.name)),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
+                                "allowedValues": "[map(steps('hostPoolOptions').logworkspaceApi.value,(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
                                 "required": true
                             }
                         }
-
-
-
-
-
-
                     ]
                 },
                 {
                     "name": "AVDNetwork",
-                    "label": "Network",
+                    "label": "Network and file",
                     "type": "Microsoft.Common.Section",
                     "visible": true,
                     "elements": [
