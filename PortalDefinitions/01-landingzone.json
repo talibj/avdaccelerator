@@ -25,7 +25,7 @@
                             "location": {
                                 "resourceTypes": []
                             }
-                        }                                               
+                        }
                     ]
                 },
                 {
@@ -80,7 +80,7 @@
                                 "validationMessage": ""
                             },
                             "visible": "[equals(steps('AVDLandingZone').avdNaming, false)]"
-                        },                            
+                        },
                         {
                             "name": "hostPoolName",
                             "type": "Microsoft.Common.TextBox",
@@ -114,29 +114,27 @@
                             "type": "Microsoft.Common.TextBlock",
                             "visible": true,
                             "options": {
-                              "text": "________________________________________________________________________________________________________________________________"
+                                "text": "________________________________________________________________________________________________________________________________"
                             }
-                        },                         
-
-						{
+                        },
+                        {
                             "name": "friendlyNameSection",
                             "type": "Microsoft.Common.Section",
                             "label": "Friendly Names",
                             "visible": true,
                             "elements": [
-                                              
                                 {
                                     "name": "friendlyNameInfo",
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                      "text": "Friendly names make it easier for end-users to identify resources they have been assigned",
-                                      "link": {
-                                        "label": "Example",
-                                        "uri": "https://github.com/Azure/avdaccelerator/blob/em-customui/Images/friendlyName.png"
-                                      }
+                                        "text": "Friendly names make it easier for end-users to identify resources they have been assigned",
+                                        "link": {
+                                            "label": "Example",
+                                            "uri": "https://github.com/Azure/avdaccelerator/blob/em-customui/Images/friendlyName.png"
+                                        }
                                     }
-                                },                                
+                                },
                                 {
                                     "name": "workspaceFriendlyName",
                                     "type": "Microsoft.Common.TextBox",
@@ -170,167 +168,167 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                      "text": "________________________________________________________________________________________________________________________________"
+                                        "text": "________________________________________________________________________________________________________________________________"
                                     }
-                                }                                
+                                }
                             ]
-                        },                        
-						{
-						"name": "hostPoolSection",
-						"type": "Microsoft.Common.Section",
-						"label": "Host Pool",
-                        "visible": true,
-						"elements": [                
-                            {
-                                "name": "hostPoolInfo",
-                                "type": "Microsoft.Common.TextBlock",
-                                "visible": true,
-                                "options": {
-                                  "text": "A host pool is a collection of virtual machines deployed from the same image",
-                                  "link": {
-                                    "label": "Info",
-                                    "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/environment-setup#host-pools"
-                                  }
+                        },
+                        {
+                            "name": "hostPoolSection",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Host Pool",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "hostPoolInfo",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "A host pool is a collection of virtual machines deployed from the same image",
+                                        "link": {
+                                            "label": "Info",
+                                            "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/environment-setup#host-pools"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "hostPoolType",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Host pool type",
+                                    "defaultValue": "Pooled",
+                                    "multiLine": true,
+                                    "toolTip": "",
+                                    "constraints": {
+                                        "required": true,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Pooled",
+                                                "description": "Multiple users per-VM",
+                                                "value": "Pooled"
+                                            },
+                                            {
+                                                "label": "Personal",
+                                                "description": "Single user per-VM",
+                                                "value": "Personal"
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "loadBalancer",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Load balancer",
+                                    "defaultValue": "DepthFirst",
+                                    "multiLine": true,
+                                    "toolTip": "Breadth-first load balancing distributes new user sessions across all available session hosts in the host pool. Depth-first load balancing distributes new user sessions to an available session host with the highest number of connections but has not reached its maximum session limit threshold.",
+                                    "constraints": {
+                                        "required": true,
+                                        "allowedValues": [
+                                            {
+                                                "label": "BreadthFirst",
+                                                "description": "Each new user is placed on the next VM. (Performance Optimized)",
+                                                "value": "BreadthFirst"
+                                            },
+                                            {
+                                                "label": "DepthFirst",
+                                                "description": "Each new user is placed on the same VM until max sessions limit. (Cost Optimized)",
+                                                "value": "DepthFirst"
+                                            }
+                                        ]
+                                    },
+                                    "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Pooled')]"
+                                },
+                                {
+                                    "name": "maxSessions",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Max sessions",
+                                    "defaultValue": "4",
+                                    "toolTip": "The maximum number of users that have concurrent sessions on a session host. When setting a host pool to have depth first load balancing or planning to use Autoscaling, you must set an appropriate max session limit according to the configuration of your deployment and capacity of your VMs.",
+                                    "constraints": {
+                                        "required": false,
+                                        "regex": "",
+                                        "validationMessage": ""
+                                    },
+                                    "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Pooled')]"
+                                },
+                                {
+                                    "name": "assignmentType",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Machine assignment",
+                                    "defaultValue": "Automatic (Recommended)",
+                                    "multiLine": true,
+                                    "toolTip": "Automatic assignment – The service will select an available host and assign it to an user. Direct assignment – Admin selects a specific host to assign to an user.",
+                                    "constraints": {
+                                        "required": true,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Automatic (Recommended)",
+                                                "description": "Users are assigned an available VM the first time they connect.",
+                                                "value": "Automatic"
+                                            },
+                                            {
+                                                "label": "Direct",
+                                                "description": "An administrator assigns a VM for each individual user.",
+                                                "value": "Direct"
+                                            }
+                                        ]
+                                    },
+                                    "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Personal')]"
+                                },
+                                {
+                                    "name": "startVmOnConnect",
+                                    "type": "Microsoft.Common.OptionsGroup",
+                                    "label": "Start on connect",
+                                    "defaultValue": "Yes (Recommended)",
+                                    "toolTip": "If powered off, start VM once user connects. ",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes (Recommended)",
+                                                "value": true
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": false
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "createVmRole",
+                                    "type": "Microsoft.Common.OptionsGroup",
+                                    "label": "Create start VM on connect role",
+                                    "defaultValue": "Yes (Required if using Start On Connect)",
+                                    "toolTip": "Create custom Azure IAM role for Start VM on Connect",
+                                    "constraints": {
+                                        "required": false,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes (Required if using Start On Connect)",
+                                                "value": true
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": false
+                                            }
+                                        ]
+                                    },
+                                    "visible": "[equals(steps('AVDLandingZone').hostPoolSection.startVmOnConnect, true)]"
+                                },
+                                {
+                                    "name": "vmRoleWarning",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": "[equals(steps('AVDLandingZone').hostPoolSection.createVmRole, false)]",
+                                    "options": {
+                                        "text": "Start VM on Connect will not work without a custom role definition. If you enable start on connect, but do not specify a custom role VM's will not start on-demand.",
+                                        "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect",
+                                        "style": "Warning"
+                                    }
                                 }
-                            },          
-                            {
-                                "name": "hostPoolType",
-                                "type": "Microsoft.Common.DropDown",
-                                "label": "Host pool type",
-                                "defaultValue": "Pooled",
-                                "multiLine": true,
-                                "toolTip": "",
-                                "constraints": {
-                                    "required": true,
-                                    "allowedValues": [
-                                        {
-                                            "label": "Pooled",
-                                            "description": "Multiple users per-VM",
-                                            "value": "Pooled"
-                                        },
-                                        {
-                                            "label": "Personal",
-                                            "description": "Single user per-VM",
-                                            "value": "Personal"
-                                        }
-                                    ]
-                                },
-                                "visible": true
-                            },
-                            {
-                                "name": "loadBalancer",
-                                "type": "Microsoft.Common.DropDown",
-                                "label": "Load balancer",
-                                "defaultValue": "DepthFirst",
-                                "multiLine": true,
-                                "toolTip": "Breadth-first load balancing distributes new user sessions across all available session hosts in the host pool. Depth-first load balancing distributes new user sessions to an available session host with the highest number of connections but has not reached its maximum session limit threshold.",
-                                "constraints": {
-                                    "required": true,
-                                    "allowedValues": [
-                                        {
-                                            "label": "BreadthFirst",
-                                            "description": "Each new user is placed on the next VM. (Performance Optimized)",
-                                            "value": "BreadthFirst"
-                                        },
-                                        {
-                                            "label": "DepthFirst",
-                                            "description": "Each new user is placed on the same VM until max sessions limit. (Cost Optimized)",
-                                            "value": "DepthFirst"
-                                        }
-                                    ]
-                                },
-                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Pooled')]"
-                            },
-                            {
-                                "name": "maxSessions",
-                                "type": "Microsoft.Common.TextBox",
-                                "label": "Max sessions",
-                                "defaultValue": "4",
-                                "toolTip": "The maximum number of users that have concurrent sessions on a session host. When setting a host pool to have depth first load balancing or planning to use Autoscaling, you must set an appropriate max session limit according to the configuration of your deployment and capacity of your VMs.",
-                                "constraints": {
-                                    "required": false,
-                                    "regex": "",
-                                    "validationMessage": ""
-                                },
-                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Pooled')]"
-                            },
-                            {
-                                "name": "assignmentType",
-                                "type": "Microsoft.Common.DropDown",
-                                "label": "Machine assignment",
-                                "defaultValue": "Automatic (Recommended)",
-                                "multiLine": true,
-                                "toolTip": "Automatic assignment – The service will select an available host and assign it to an user. Direct assignment – Admin selects a specific host to assign to an user.",
-                                "constraints": {
-                                    "required": true,
-                                    "allowedValues": [
-                                        {
-                                            "label": "Automatic (Recommended)",
-                                            "description": "Users are assigned an available VM the first time they connect.",
-                                            "value": "Automatic"
-                                        },
-                                        {
-                                            "label": "Direct",
-                                            "description": "An administrator assigns a VM for each individual user.",
-                                            "value": "Direct"
-                                        }
-                                    ]
-                                },
-                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.hostPoolType, 'Personal')]"
-                            },
-                            {
-                                "name": "startVmOnConnect",
-                                "type": "Microsoft.Common.OptionsGroup",
-                                "label": "Start on connect",
-                                "defaultValue": "Yes (Recommended)",
-                                "toolTip": "If powered off, start VM once user connects. ",
-                                "constraints": {
-                                    "required": false,
-                                    "allowedValues": [
-                                        {
-                                            "label": "Yes (Recommended)",
-                                            "value": true
-                                        },
-                                        {
-                                            "label": "No",
-                                            "value": false
-                                        }
-                                    ]
-                                },
-                                "visible": true
-                            },
-                            {
-                                "name": "createVmRole",
-                                "type": "Microsoft.Common.OptionsGroup",
-                                "label": "Create start VM on connect role",
-                                "defaultValue": "Yes (Required if using Start On Connect)",
-                                "toolTip": "Create custom Azure IAM role for Start VM on Connect",
-                                "constraints": {
-                                    "required": false,
-                                    "allowedValues": [
-                                        {
-                                            "label": "Yes (Required if using Start On Connect)",
-                                            "value": true
-                                        },
-                                        {
-                                            "label": "No",
-                                            "value": false
-                                        }
-                                    ]
-                                },
-                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.startVmOnConnect, true)]"
-                            },
-                            {
-                                "name": "vmRoleWarning",
-                                "type": "Microsoft.Common.InfoBox",
-                                "visible": "[equals(steps('AVDLandingZone').hostPoolSection.createVmRole, false)]",
-                                "options": {
-                                    "text": "Start VM on Connect will not work without a custom role definition. If you enable start on connect, but do not specify a custom role VM's will not start on-demand.",
-                                    "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect",
-                                    "style": "Warning"
-                                }
-                            }                                                        
-                        ]
+                            ]
                         }
                     ]
                 },
@@ -358,7 +356,7 @@
                                 ]
                             },
                             "visible": true
-                        },		
+                        },
                         {
                             "name": "sessionBehavior",
                             "type": "Microsoft.Common.Section",
@@ -501,7 +499,7 @@
                                         ]
                                     },
                                     "visible": true
-                                }                                                                                                                                         
+                                }
                             ]
                         },
                         {
@@ -524,7 +522,7 @@
                                 ]
                             },
                             "visible": true
-                        },		
+                        },
                         {
                             "name": "deviceRedirection",
                             "type": "Microsoft.Common.Section",
@@ -644,7 +642,7 @@
                                             {
                                                 "label": "Do not play sounds",
                                                 "value": "audiomode:i:2"
-                                            }                                            
+                                            }
                                         ]
                                     },
                                     "visible": true
@@ -671,7 +669,7 @@
                                             {
                                                 "label": "Don't redirect any cameras (Default)",
                                                 "value": "camerastoredirect:s:"
-                                            }                                           
+                                            }
                                         ]
                                     },
                                     "visible": true
@@ -706,30 +704,30 @@
                                             {
                                                 "label": "Don't redirect any drives (Default)",
                                                 "value": "drivestoredirect:s:"
-                                            }                                                                                                                                                                                                       
+                                            }
                                         ]
                                     },
                                     "visible": true
                                 },
-                                    {
-                                        "name": "hpSelectedDriveRedirection",
-                                        "type": "Microsoft.Common.TextBox",
-                                        "label": "Drives",
-                                        "defaultValue": "C\\:\\;E\\:\\",
-                                        "toolTip": "Manually choose which drives should be redirected.",
-                                        "placeholder": "Example (redirect C and E drives): C\\:\\; E\\:\\",
-                                        "multiLine": false,
-                                        "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpDriveRedirection, 'manualDrives')]",
-                                        "constraints": {
+                                {
+                                    "name": "hpSelectedDriveRedirection",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Drives",
+                                    "defaultValue": "C\\:\\;E\\:\\",
+                                    "toolTip": "Manually choose which drives should be redirected.",
+                                    "placeholder": "Example (redirect C and E drives): C\\:\\; E\\:\\",
+                                    "multiLine": false,
+                                    "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpDriveRedirection, 'manualDrives')]",
+                                    "constraints": {
                                         "required": false,
                                         "validations": [
                                             {
-                                            "regex": "^[a-zA-Z]\\\\:\\\\",
-                                            "message": "Drive redirect format error: Drive format: C\\:\\"
+                                                "regex": "^[a-zA-Z]\\\\:\\\\",
+                                                "message": "Drive redirect format error: Drive format: C\\:\\"
                                             }
                                         ]
-                                        }
-                                    },
+                                    }
+                                },
                                 {
                                     "name": "hpRedirectclipboard",
                                     "type": "Microsoft.Common.DropDown",
@@ -752,7 +750,7 @@
                                             {
                                                 "label": "Clipboard on local computer is not available in remote session",
                                                 "value": "redirectclipboard:i:0"
-                                            }                                           
+                                            }
                                         ]
                                     },
                                     "visible": true
@@ -779,7 +777,7 @@
                                             {
                                                 "label": "COM ports on the local computer are not available in the remote session (Default)",
                                                 "value": "redirectcomports:i:0"
-                                            }                                           
+                                            }
                                         ]
                                     },
                                     "visible": true
@@ -806,7 +804,7 @@
                                             {
                                                 "label": "The printers on the local computer are not available in the remote session",
                                                 "value": "redirectprinters:i:0"
-                                            }                                           
+                                            }
                                         ]
                                     },
                                     "visible": true
@@ -833,7 +831,7 @@
                                             {
                                                 "label": "The smart card device on the local computer is not available in the remote session",
                                                 "value": "redirectsmartcards:i:0"
-                                            }                                           
+                                            }
                                         ]
                                     },
                                     "visible": true
@@ -856,7 +854,7 @@
                                             {
                                                 "label": "Redirect all USB devices that are not already redirected by another high-level redirection",
                                                 "value": "usbdevicestoredirect:s:*"
-                                            },                                        
+                                            },
                                             {
                                                 "label": "Redirect all devices that are members of the specified device setup class or device defined by specific instance ID",
                                                 "value": "usbInstanceIds"
@@ -864,25 +862,25 @@
                                             {
                                                 "label": "Don't redirect Redirect any USB devices (Default)",
                                                 "value": "usbdevicestoredirect:s:"
-                                            }                                                                                       
+                                            }
                                         ]
                                     },
                                     "visible": true
                                 },
-                                    {
-                                        "name": "hpSelectedUsbdevicestoredirect",
-                                        "type": "Microsoft.Common.TextBox",
-                                        "label": "USB Device ID's",
-                                        "defaultValue": "",
-                                        "toolTip": "Choose which USB device or class ID's should be redirected.",
-                                        "placeholder": "Example: 52ae366d-f376-4c62-a2d9-e0fce0cc2a18\\;6aea2da3-17cb-4cd7-9977-47c9cae404ab",
-                                        "multiLine": true,
-                                        "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpusbdevicestoredirect, 'usbInstanceIds')]",
-                                        "constraints": {
+                                {
+                                    "name": "hpSelectedUsbdevicestoredirect",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "USB Device ID's",
+                                    "defaultValue": "",
+                                    "toolTip": "Choose which USB device or class ID's should be redirected.",
+                                    "placeholder": "Example: 52ae366d-f376-4c62-a2d9-e0fce0cc2a18\\;6aea2da3-17cb-4cd7-9977-47c9cae404ab",
+                                    "multiLine": true,
+                                    "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpusbdevicestoredirect, 'usbInstanceIds')]",
+                                    "constraints": {
                                         "required": false,
                                         "validations": []
-                                        }
-                                    }                                                                                                                                                                                                                                                                                                                                                                                                                   
+                                    }
+                                }
                             ]
                         },
                         {
@@ -905,13 +903,13 @@
                                 ]
                             },
                             "visible": true
-                        },   
+                        },
                         {
                             "name": "displaySettings",
                             "type": "Microsoft.Common.Section",
                             "label": "Display settings",
                             "visible": "[equals(steps('hostPoolOptions').displayAdjust, true)]",
-                            "elements": [  
+                            "elements": [
                                 {
                                     "name": "multimon",
                                     "type": "Microsoft.Common.DropDown",
@@ -965,7 +963,7 @@
                                             }
                                         ]
                                     }
-                                },                       
+                                },
                                 {
                                     "name": "maximizetocurrentdisplays",
                                     "type": "Microsoft.Common.DropDown",
@@ -992,7 +990,6 @@
                                             }
                                         ]
                                     }
-                                    
                                 },
                                 {
                                     "name": "singlemoninwindowedmode",
@@ -1020,7 +1017,6 @@
                                             }
                                         ]
                                     }
-                                    
                                 },
                                 {
                                     "name": "screenmodeid",
@@ -1048,7 +1044,6 @@
                                             }
                                         ]
                                     }
-                                    
                                 },
                                 {
                                     "name": "smartsizing",
@@ -1076,7 +1071,6 @@
                                             }
                                         ]
                                     }
-                                    
                                 },
                                 {
                                     "name": "dynamicresolution",
@@ -1143,74 +1137,85 @@
                                             }
                                         ]
                                     }
-                                }                                                                                                                                                                                                                                         
-                            ]                  
+                                }
+                            ]
                         }
                     ]
-                },                
+                },
                 {
                     "name": "AVDNetwork",
                     "label": "Network",
                     "type": "Microsoft.Common.Section",
                     "visible": true,
-                    "elements": [                      
-						{
+                    "elements": [
+                        {
+                            "name": "vnetInfoBox",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": true,
+                            "options": {
+                                "text": "When not leveraging AAD Join, AVD requires connectivity to either AADDS or Active Directory domain controllers in order to domain join AVD systems. When creating a new VNet for AVD systems it is important to setup VNet peering to an established VNet that has existing connectivity to domain controllers or AADDS.",
+                                "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/network-connectivity",
+                                "style": "info"
+                            }
+                        },                        
+                        {
                             "name": "createAvdVnet",
-                             "type": "Microsoft.Common.OptionsGroup",
-                             "label": "Network",
-                             "defaultValue": "New",
-                             "toolTip": "",
-                             "constraints": {
-                                 "required": true,
-                                 "allowedValues": [
-                                     {
-                                         "label": "New",
-                                         "value": true
-                                     },
-                                     {
-                                         "label": "Existing",
-                                         "value": false
-                                     }
-                                 ]
-                             },
-                             "visible": true
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Network",
+                            "defaultValue": "New",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "New",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "Existing",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
                         },
-						{
-							"name": "avdVnetNAme",
-							"type": "Microsoft.Common.TextBox",
-							"label": "VNet Name",
-							"defaultValue": "",
-							"toolTip": "",
-							"constraints": {
-								"required": true,
-								"regex": ""
-							},
-							"visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
-						},
-						{
-							"name": "avdVnetSize",
-							"type": "Microsoft.Common.TextBox",
-							"label": "VNet Address Space",
-							"defaultValue": "10.10.0.0/24",
-							"toolTip": "",
-							"constraints": {
-								"required": true,
-								"regex": ""
-							},
-							"visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
-						}, 
-						{
-							"name": "avdVnetDNS",
-							"type": "Microsoft.Common.TextBox",
-							"label": "VNet DNS Servers",
-							"defaultValue": "10.10.100.50, 10.20.100.50",
-							"toolTip": "Separate multiple entries with a comma",
-							"constraints": {
-								"required": true,
-								"regex": ""
-							},
-							"visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
-						},
+                        {
+                            "name": "avdVnetNAme",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet Name",
+                            "defaultValue": "",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": true,
+                                "regex": ""
+                            },
+                            "visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
+                        },
+                        {
+                            "name": "avdVnetSize",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet Address Space",
+                            "toolTip": "Virtual network for AVD virtual machines",
+                            "placeholder": "Example: 10.10.0.0/24",
+                            "constraints": {
+                                "required": true,
+                                "regex": ""
+                            },
+                            "visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
+                        },
+                        {
+                            "name": "avdVnetDNS",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet DNS Servers",
+                            "defaultValue": "",
+                            "placeholder": "Example: 10.10.100.50, 10.20.100.50",
+                            "toolTip": "Separate multiple entries with a comma",
+                            "constraints": {
+                                "required": true,
+                                "regex": ""
+                            },
+                            "visible": "[equals(steps('AVDNetwork').createAvdVnet, true)]"
+                        },
                         {
                             "name": "vnetSelector",
                             "type": "Microsoft.Solutions.ResourceSelector",
@@ -1248,7 +1253,7 @@
                                 "allowedValues": "[map(steps('AVDNetwork').subnetApi.value,(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
                                 "required": true
                             }
-                        },                      
+                        },
                         {
                             "name": "createProfileStorage",
                             "type": "Microsoft.Common.OptionsGroup",
@@ -1270,23 +1275,23 @@
                                 ]
                             }
                         },
-						{
-							"name": "profileShareSize",
-							"type": "Microsoft.Common.Slider",
-							"min": 1,
-							"max": 20,
-							"label": "File Share Size",
-							"defaultValue": 1,
+                        {
+                            "name": "profileShareSize",
+                            "type": "Microsoft.Common.Slider",
+                            "min": 1,
+                            "max": 20,
+                            "label": "File Share Size",
+                            "defaultValue": 1,
                             "subLabel": "x 100GB",
-							"showStepMarkers": true,
-							"toolTip": "Size of Premium File share in 100GB increments",
-							"constraints": {
-								"required": true
-							},
-							"visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
-						},                        
-						{
-                           "name": "fileBackup",
+                            "showStepMarkers": true,
+                            "toolTip": "Size of Premium File share in 100GB increments",
+                            "constraints": {
+                                "required": true
+                            },
+                            "visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
+                        },
+                        {
+                            "name": "fileBackup",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Enable Azure Backup for User Profile Data",
                             "defaultValue": "Yes (Recommended)",
@@ -1304,41 +1309,47 @@
                                     }
                                 ]
                             },
-							"visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
-						},
-						{
+                            "visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
+                        },
+                        {
+                            "name": "backupWarning",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": "[equals(steps('AVDNetwork').fileBackup, false)]",
+                            "options": {
+                                "text": "It is strongly advised to backup user profile data. Backups protect against corruption, accidental deletion, and ransomware.",
+                                "uri": "https://docs.microsoft.com/en-us/azure/backup/azure-file-share-backup-overview",
+                                "style": "Warning"
+                            }
+                        },
+                        {
                             "name": "privateDnsPrompt",
-                             "type": "Microsoft.Common.OptionsGroup",
-                             "label": "Private DNS Zone",
-                             "defaultValue": "New",
-                             "toolTip": "This is used to provide private access to user profile storage",
-                             "constraints": {
-                                 "required": true,
-                                 "allowedValues": [
-                                     {
-                                         "label": "New",
-                                         "value": true
-                                     },
-                                     {
-                                         "label": "Existing",
-                                         "value": false
-                                     }
-                                 ]
-                             },
-                             "visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
-                         },
-
-
-                         
-                         {
-                             "name": "subscriptionApi",
-                             "type": "Microsoft.Solutions.ArmApiControl",
-                             "request": {
-                                 "method": "GET",
-                                 "path": "subscriptions?api-version=2020-01-01"
-                             }
-                         }, 
-
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Private DNS Zone",
+                            "defaultValue": "New",
+                            "toolTip": "This is used to provide private access to user profile storage",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "New",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "Existing",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": "[equals(steps('AVDNetwork').createProfileStorage, true)]"
+                        },
+                        {
+                            "name": "subscriptionApi",
+                            "type": "Microsoft.Solutions.ArmApiControl",
+                            "request": {
+                                "method": "GET",
+                                "path": "subscriptions?api-version=2020-01-01"
+                            }
+                        },
                         {
                             "name": "privateDnsZonesSub",
                             "label": "Subscription with Private DNS Zones",
@@ -1380,29 +1391,13 @@
                                 "allowedValues": "[map(filter(steps('AVDNetwork').privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.file.core.windows.net')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
                                 "required": true
                             }
-                        },
-
-
-
-
-
-
-                        {
-                            "name": "backupWarning",
-                            "type": "Microsoft.Common.InfoBox",
-                            "visible": "[equals(steps('AVDNetwork').fileBackup, false)]",
-                            "options": {
-                                "text": "It is strongly advised to backup user profile data. Backups protect against corruption, accidental deletion, and ransomware.",
-                                "uri": "https://docs.microsoft.com/en-us/azure/backup/azure-file-share-backup-overview",
-                                "style": "Warning"
-                            }
-                        }                        													
-					]
+                        }
+                    ]
                 },
                 {
                     "name": "Images",
                     "label": "Image customization",
-                    "elements": [										
+                    "elements": [
                         {
                             "name": "buildImages",
                             "type": "Microsoft.Common.DropDown",
@@ -1435,7 +1430,29 @@
                                             "publisher": "MicrosoftWindowsDesktop",
                                             "sku": "20h2-evd-o365pp"
                                         }
-                                    }
+                                    },
+                                    {
+                                        "label": "Win11 Enterprise",
+                                        "value": {
+                                            "name": "Windows11_21H2",
+                                            "osType": "Windows",
+                                            "osState": "Generalized",
+                                            "offer": "windows-11",
+                                            "publisher": "MicrosoftWindowsDesktop",
+                                            "sku": "win11-21h2-avd"
+                                        }
+                                    },
+                                    {
+                                        "label": "Win11 Enterprise 21H2 + M365",
+                                        "value": {
+                                            "name": "Windows11_21H2_Office",
+                                            "osType": "Windows",
+                                            "osState": "Generalized",
+                                            "offer": "office-365",
+                                            "publisher": "MicrosoftWindowsDesktop",
+                                            "sku": "win11-21h2-avd-m365"
+                                        }
+                                    }                                                                            
                                 ]
                             },
                             "visible": true
@@ -1449,21 +1466,21 @@
                                 "uri": "https://docs.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries#scaling",
                                 "style": "info"
                             }
-                        },                         
-						{
-							"name": "imageReplicas",
-							"type": "Microsoft.Common.Slider",
-							"min": 1,
-							"max": 15,
-							"label": "Image Replicas",
-							"defaultValue": 1,
-							"showStepMarkers": true,
-							"toolTip": "Number of in-region replicas for scaling performance.",
-							"constraints": {
-								"required": true
-							},
-							"visible": true
-						},
+                        },
+                        {
+                            "name": "imageReplicas",
+                            "type": "Microsoft.Common.Slider",
+                            "min": 1,
+                            "max": 15,
+                            "label": "Image Replicas",
+                            "defaultValue": 1,
+                            "showStepMarkers": true,
+                            "toolTip": "Number of in-region replicas for scaling performance.",
+                            "constraints": {
+                                "required": true
+                            },
+                            "visible": true
+                        },
                         {
                             "name": "imageCustomization",
                             "type": "Microsoft.Common.DropDown",
@@ -1479,39 +1496,39 @@
                                         "label": "RDP Shortpath",
                                         "value": {
                                             "name": "RDP",
-											"scriptType": "uri",
-											"scriptLocation": "https://aka.ms/avdgpo"
+                                            "scriptType": "uri",
+                                            "scriptLocation": "https://aka.ms/avdgpo"
                                         }
                                     },
                                     {
                                         "label": "Screen Capture Protection",
                                         "value": {
                                             "name": "New-NetFirewallRule -DisplayName 'Remote Desktop - Shortpath (UDP-In)'  -Action Allow -Description 'Inbound rule for the Remote Desktop service to allow RDP traffic. [UDP 3390]' -Group '@FirewallAPI.dll,-28752' -Name 'RemoteDesktop-UserMode-In-Shortpath-UDP'  -PolicyStore PersistentStore -Profile Domain, Private -Service TermService -Protocol udp -LocalPort 3390 -Program '%SystemRoot%\\system32\\svchost.exe' -Enabled:True",
-											"scriptType": "uri",
-											"scriptLocation": "https://aka.ms/avdgpo"
+                                            "scriptType": "uri",
+                                            "scriptLocation": "https://aka.ms/avdgpo"
                                         }
-                                    },									
+                                    },
                                     {
                                         "label": "Disable Automatic Updates",
                                         "value": {
                                             "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU' /v NoAutoUpdate /t REG_DWORD /d 1 /f",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Time Zone Redirection",
                                         "value": {
                                             "name": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services' /v fEnableTimeZoneRedirection /t REG_DWORD /d 1 /f",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Disable Storage Sense",
                                         "value": {
                                             "name": "reg add 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy' /v 01 /t REG_DWORD /d 0 /f",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
-                                    }									
+                                    }
                                 ]
                             },
                             "visible": true
@@ -1531,39 +1548,39 @@
                                         "label": "Container Naming: Username followed by SID",
                                         "value": {
                                             "name": "namesid",
-											"scriptType": "uri",
-											"scriptLocation": "https://aka.ms/avdgpo"
+                                            "scriptType": "uri",
+                                            "scriptLocation": "https://aka.ms/avdgpo"
                                         }
                                     },
                                     {
                                         "label": "Virtual Disk Type: VHDX",
                                         "value": {
                                             "name": "vhdx",
-											"scriptType": "uri",
-											"scriptLocation": "https://aka.ms/avdgpo"
+                                            "scriptType": "uri",
+                                            "scriptLocation": "https://aka.ms/avdgpo"
                                         }
-                                    },									
+                                    },
                                     {
                                         "label": "Delete Local Profile when FSLogix Profile Should Apply",
                                         "value": {
                                             "name": "fsldeleteprof",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Prevent Login with Failure",
                                         "value": {
                                             "name": "logindeny",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Prevent Login with Temporary Profile",
                                         "value": {
                                             "name": "tempprof",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
-                                    }									
+                                    }
                                 ]
                             },
                             "visible": true
@@ -1583,50 +1600,50 @@
                                         "label": "Include Office in Cache",
                                         "value": {
                                             "name": "ocache",
-											"scriptType": "uri",
-											"scriptLocation": "https://aka.ms/avdgpo"
+                                            "scriptType": "uri",
+                                            "scriptLocation": "https://aka.ms/avdgpo"
                                         }
                                     },
                                     {
                                         "label": "Include Outlook in Cache",
                                         "value": {
                                             "name": "outcache",
-											"scriptType": "uri",
-											"scriptLocation": "https://aka.ms/avdgpo"
+                                            "scriptType": "uri",
+                                            "scriptLocation": "https://aka.ms/avdgpo"
                                         }
-                                    },									
+                                    },
                                     {
                                         "label": "Include Teams in Cache",
                                         "value": {
                                             "name": "teamscache",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Include Search Database in Cache",
                                         "value": {
                                             "name": "searchcache",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Include OneNote in Cache",
                                         "value": {
                                             "name": "onenotecache",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
                                     },
                                     {
                                         "label": "Include OneDrive in Cache",
                                         "value": {
                                             "name": "onedrivecache",
-											"scriptType": "inline"
+                                            "scriptType": "inline"
                                         }
-                                    }	                                    									
+                                    }
                                 ]
                             },
                             "visible": true
-                        },                                                 						
+                        },
                         {
                             "name": "imageRegionReplicas",
                             "type": "Microsoft.Common.DropDown",
@@ -1816,7 +1833,7 @@
                             "visible": true
                         }
                     ]
-                }                								
+                }
             ]
         },
         "outputs": {

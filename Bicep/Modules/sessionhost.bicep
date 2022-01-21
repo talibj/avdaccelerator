@@ -17,6 +17,8 @@ param domainUserName string
 param ouPath string
 param installNVidiaGPUDriver bool = false
 
+var avdDsc = 'https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_11-22-2021.zip'
+
 
 var hostPoolName = split(hostPoolId, '/')[8]
 var hostPoolRg = split(hostPoolId, '/')[4]
@@ -144,7 +146,7 @@ resource sessionHostAVDAgent 'Microsoft.Compute/virtualMachines/extensions@2021-
     typeHandlerVersion: '2.73'
     autoUpgradeMinorVersion: true
     settings: {
-      modulesUrl: 'https://raw.githubusercontent.com/Azure/RDS-Templates/master/ARM-wvd-templates/DSC/Configuration.zip'
+      modulesUrl: avdDsc
       configurationFunction: 'Configuration.ps1\\AddSessionHost'
       properties: {
         hostPoolName: hostPoolName
