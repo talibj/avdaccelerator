@@ -1513,7 +1513,7 @@
                                         }
                                     },
                                     {
-                                        "label": "Win11 Enterprise",
+                                        "label": "Win11 Enterprise 21H2",
                                         "value": {
                                             "name": "Windows11_21H2",
                                             "osType": "Windows",
