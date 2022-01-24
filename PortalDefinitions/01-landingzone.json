@@ -343,7 +343,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": "[equals(steps('avdComponentsSection').createVmRole, false)]",
                             "options": {
-                                "text": "Start VM on Connect will not work without a custom role definition. If you enable start on connect, but do not specify a custom role VM's will not start on-demand.",
+                                "text": "Start VM on Connect will not work without a custom role definition. If you enable start on connect, but do not specify a custom role VM's will not start on-demand. Only select no if this custom role already exists and is assigned to your AVD subscription.",
                                 "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect",
                                 "style": "Warning"
                             }
