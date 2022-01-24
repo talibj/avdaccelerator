@@ -9,16 +9,7 @@
                     "name": "basics",
                     "label": "Getting started",
                     "elements": [
-                        {
-                            "name": "info",
-                            "type": "Microsoft.Common.InfoBox",
-                            "visible": true,
-                            "options": {
-                                "text": "The AVD Solution Accelerator provisions the foundational items required to build and run an Azure Virtual Desktop environment.",
-                                "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/overview",
-                                "style": "Info"
-                            }
-                        },
+        
                         {
                             "name": "resourceScope",
                             "type": "Microsoft.Common.ResourceScope",
@@ -102,13 +93,7 @@
                                 "validationMessage": ""
                             },
                             "visible": "[equals(steps('basics').avdNaming, true)]"
-                        }                        
-                    ]
-                },
-                {
-                    "name": "avdComponentsSection",
-                    "label": "AVD components",
-                    "elements": [
+                        },
                         {
                             "name": "friendlyNameInfo",
                             "type": "Microsoft.Common.InfoBox",
@@ -146,6 +131,75 @@
                                 "validationMessage": ""
                             },
                             "visible": true
+                        }                                                
+                    ]
+                },
+                {
+                    "name": "avdComponentsSection",
+                    "label": "AVD components",
+                    "elements": [
+                        {
+                            "name": "aaddsInfo",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": true,
+                            "options": {
+                                "text": "AVD supports both AD DS (Active Directory) and AADDS (Azure Active Directory Domain Services) for domain joining virtual desktops. AAD Joined desktops are out of scope for this deployment.",
+                                "uri": "https://docs.microsoft.com/en-us/azure/virtual-desktop/authentication#identities",
+                                "style": "Info"
+                            }
+                        }, 
+                        {
+                            "name": "avdIdentityOption",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Identity",
+                            "defaultValue": "Active Directory (AD DS)",
+                            "toolTip": "",
+                            "constraints": {
+                                "required": false,
+                                "allowedValues": [
+                                    {
+                                        "label": "Active Directory (AD DS)",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "Azure Active Directory Domain Services (AADDS)",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": true
+                        },
+                        {
+                            "name": "createAAdDs",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "AADDS",
+                            "defaultValue": "New",
+                            "toolTip": "A new AADDS instance will be provisioned in this subscription if none currently exists otherwise you may select an existing implementation.",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "New",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "Existing",
+                                        "value": false
+                                    }
+                                ]
+                            },
+                            "visible": "[equals(steps('avdComponentsSection').avdIdentityOption, false)]"
+                        },
+                        {
+                            "name": "aaddsSelector",
+                            "type": "Microsoft.Solutions.ResourceSelector",
+                            "label": "Existing AADDS Instance",
+                            "visible": "[equals(steps('avdComponentsSection').createAAdDs, false)]",
+                            "resourceType": "Microsoft.AAD/domainServices",
+                            "options": {
+                                "filter": {
+                                }
+                            }
                         },
                         {
                             "name": "hostPoolInfo",
