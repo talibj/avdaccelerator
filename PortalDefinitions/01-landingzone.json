@@ -382,7 +382,7 @@
                             "visible": "[equals(steps('hostPoolOptions').sessionAdjust, true)]",
                             "elements": [
                                 {
-                                    "name": "hpReconnection",
+                                    "name": "autoreconnection",
                                     "type": "Microsoft.Common.DropDown",
                                     "label": "Reconnection",
                                     "multiselect": false,
@@ -411,7 +411,7 @@
                                     "visible": true
                                 },
                                 {
-                                    "name": "hpBandwidth",
+                                    "name": "bandwidthautodetect",
                                     "type": "Microsoft.Common.DropDown",
                                     "label": "Bandwidth auto detect",
                                     "multiselect": false,
@@ -438,7 +438,7 @@
                                     "visible": true
                                 },
                                 {
-                                    "name": "hpNetworkauto",
+                                    "name": "networkautodetect",
                                     "type": "Microsoft.Common.DropDown",
                                     "label": "Network auto detect",
                                     "multiselect": false,
@@ -1937,18 +1937,35 @@
         },
         "outputs": {
             "parameters": {
+                "avdSubscriptionId": "[steps('basics').resourceScope.subscriptionid]",
                 "avdResourceGroup": "[steps('basics').resourceScope.resourceGroup.name]",
                 "location": "[steps('basics').resourceScope.location]",
+                "workspaceName": "[steps('basics').workspaceName]",
+                "appGroupName": "[steps('basics').appGroupName]",
+                "hostPoolName": "[steps('basics').hostPoolName]",
+                "avdNamingConvention": "[steps('basics').avdNamingConvention]",
+                "workspaceFriendlyName": "[steps('basics').workspaceFriendlyName]",
+                "sessionHostFriendly": "[steps('basics').sessionHostFriendly]",
+                "aaddsId": "[steps('avdComponentsSection').aaddsSelector.id]",
                 "hostPoolType": "[steps('avdComponentsSection').hostPoolType]",
                 "loadBalancer": "[steps('avdComponentsSection').loadBalancer]",
                 "maxSessions": "[steps('avdComponentsSection').maxSessions]",
                 "assignmentType": "[steps('avdComponentsSection').assignmentType]",
                 "startVmOnConnect": "[steps('avdComponentsSection').startVmOnConnect]",
                 "createVmRole": "[steps('avdComponentsSection').createVmRole]",
+
+
+
+"autoreconnection":  "[if(equals(steps('hostPoolOptions').sessionBehavior.autoreconnection, 'Not configured'), null, steps('hostPoolOptions').sessionBehavior.autoreconnection)]",
+"bandwidthautodetect":  "[if(equals(steps('hostPoolOptions').sessionBehavior.bandwidthautodetect, 'Not configured'), null, steps('hostPoolOptions').sessionBehavior.bandwidthautodetect)]",
+
+
                 "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
                 "fileBackup": "[steps('AVDNetwork').fileBackup]"
             },
-            "kind": "ResourceGroup"
+            "kind": "ResourceGroup",
+            "location": "[steps('basics').resourceScope.locationName]",
+            "resourceGroupId": "[steps('basics').resourceScope.resourceGroupId]"
         }
     }
 }
