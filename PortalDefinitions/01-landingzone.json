@@ -1172,7 +1172,7 @@
                             "name": "avdMonitoringPrompt",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Log Analytics Workspace",
-                            "defaultValue": "Existing",
+                            "defaultValue": "Existing (Recommended)",
                             "toolTip": "Log workspace for collecting AVD monitoring metrics",
                             "constraints": {
                                 "required": true,
@@ -1182,7 +1182,7 @@
                                         "value": true
                                     },
                                     {
-                                        "label": "Existing",
+                                        "label": "Existing (Recommended)",
                                         "value": false
                                     }
                                 ]
@@ -1195,6 +1195,16 @@
                             "request": {
                                 "method": "GET",
                                 "path": "subscriptions?api-version=2020-01-01"
+                            }
+                        },
+                        {
+                            "name": "loggingWarning",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": "[equals(steps('hostPoolOptions').avdMonitoringPrompt, true)]",
+                            "options": {
+                                "text": "It is strongly advised to leverage the centralized Log Workspace created during an Enterprise Scale Landing Zone (ESLZ) deployment. If you have not deployed ESLZ please consider starting with a solution there and returning to this deployment once complete.",
+                                "uri": "https://github.com/Azure/Enterprise-Scale#deploying-enterprise-scale-architecture-in-your-own-environment",
+                                "style": "Warning"
                             }
                         },
                         {
