@@ -731,11 +731,11 @@
                                     "name": "hpSelectedDriveRedirection",
                                     "type": "Microsoft.Common.TextBox",
                                     "label": "Drives",
-                                    "defaultValue": "C\\:\\;E\\:\\",
+                                    "defaultValue": "",
                                     "toolTip": "Manually choose which drives should be redirected.",
                                     "placeholder": "Example (redirect C and E drives): C\\:\\; E\\:\\",
                                     "multiLine": false,
-                                    "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpDriveRedirection, 'manualDrives')]",
+                                    "visible": "[equals(steps('hostPoolOptions').deviceRedirection.drivestoredirect, 'manualDrives')]",
                                     "constraints": {
                                         "required": false,
                                         "validations": [
