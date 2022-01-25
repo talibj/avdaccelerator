@@ -1279,7 +1279,7 @@
                             "visible": true
                         },
                         {
-                            "name": "avdVnetNAme",
+                            "name": "avdVnetName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "VNet Name",
                             "defaultValue": "",
@@ -1975,8 +1975,17 @@
                 "smartsizing":  "[if(equals(steps('hostPoolOptions').displaySettings.smartsizing, 'Not configured'), null, steps('hostPoolOptions').displaySettings.smartsizing)]",                
                 "dynamicresolution":  "[if(equals(steps('hostPoolOptions').displaySettings.dynamicresolution, 'Not configured'), null, steps('hostPoolOptions').displaySettings.dynamicresolution)]",
                 "desktopsizeid":  "[if(equals(steps('hostPoolOptions').displaySettings.desktopsizeid, 'Not configured'), null, steps('hostPoolOptions').displaySettings.desktopsizeid)]",
-                "createProfileStorage": "[steps('AVDNetwork').createProfileStorage]",
+                "createLogWorkspace": "[steps('hostPoolOptions').avdMonitoringPrompt]",
+                "logWorkspaceId":  "[steps('hostPoolOptions').logWorkspaceId]",
+                "avdVnet":  "[if(equals(steps('AVDNetwork').createAvdVnet, false), null, steps('AVDNetwork').subnetId)]",
+                "avdVnetName":  "[if(equals(steps('AVDNetwork').createAvdVnet, true), steps('AVDNetwork').avdVnetName, null)]",
+                "avdVnetSize":  "[if(equals(steps('AVDNetwork').createAvdVnet, true), steps('AVDNetwork').avdVnetSize, null)]",
+                "avdVnetDNS":  "[if(equals(steps('AVDNetwork').createAvdVnet, true), steps('AVDNetwork').avdVnetDNS, null)]",
+
+                "profileShareSize":  "[if(equals(steps('AVDNetwork').createProfileStorage, true), steps('AVDNetwork').profileShareSize, null)]",
                 "fileBackup": "[steps('AVDNetwork').fileBackup]"
+
+
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.locationName]",
