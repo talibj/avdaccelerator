@@ -1981,11 +1981,16 @@
                 "avdVnetName":  "[if(equals(steps('AVDNetwork').createAvdVnet, true), steps('AVDNetwork').avdVnetName, null)]",
                 "avdVnetSize":  "[if(equals(steps('AVDNetwork').createAvdVnet, true), steps('AVDNetwork').avdVnetSize, null)]",
                 "avdVnetDNS":  "[if(equals(steps('AVDNetwork').createAvdVnet, true), steps('AVDNetwork').avdVnetDNS, null)]",
-
                 "profileShareSize":  "[if(equals(steps('AVDNetwork').createProfileStorage, true), steps('AVDNetwork').profileShareSize, null)]",
-                "fileBackup": "[steps('AVDNetwork').fileBackup]"
-
-
+                "fileBackup": "[steps('AVDNetwork').fileBackup]",
+                "createPrivateDns": "[steps('AVDNetwork').privateDnsPrompt]",
+                "privateDnsId":  "[steps('AVDNetwork').privateDnsZoneIdFiles]",
+                "imagesToBuild": "[steps('Images').buildImages]",
+                "imageReplicas": "[steps('Images').imageReplicas]",
+                "imageCustomization": "[steps('Images').imageCustomization]",
+                "fslProfCustomization": "[steps('Images').fslProfCustomization]",
+                "fslCustomization": "[steps('Images').fslCustomization]",
+                "imageRegionReplicas": "[steps('Images').imageRegionReplicas]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.locationName]",
