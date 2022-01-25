@@ -1529,29 +1529,7 @@
                                             "publisher": "MicrosoftWindowsDesktop",
                                             "sku": "20h2-evd-o365pp"
                                         }
-                                    },
-                                    {
-                                        "label": "Win11 Enterprise 21H2",
-                                        "value": {
-                                            "name": "Windows11_21H2",
-                                            "osType": "Windows",
-                                            "osState": "Generalized",
-                                            "offer": "windows-11",
-                                            "publisher": "MicrosoftWindowsDesktop",
-                                            "sku": "win11-21h2-avd"
-                                        }
-                                    },
-                                    {
-                                        "label": "Win11 Enterprise 21H2 + M365",
-                                        "value": {
-                                            "name": "Windows11_21H2_Office",
-                                            "osType": "Windows",
-                                            "osState": "Generalized",
-                                            "offer": "office-365",
-                                            "publisher": "MicrosoftWindowsDesktop",
-                                            "sku": "win11-21h2-avd-m365"
-                                        }
-                                    }                                                                            
+                                    }                                                                           
                                 ]
                             },
                             "visible": true
