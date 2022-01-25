@@ -1202,7 +1202,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": "[equals(steps('hostPoolOptions').avdMonitoringPrompt, true)]",
                             "options": {
-                                "text": "It is strongly advised to leverage the centralized Log Workspace created during an Enterprise Scale Landing Zone (ESLZ) deployment. If you have not deployed ESLZ please consider starting with a solution there and returning to this deployment once complete.",
+                                "text": "It is strongly advised to leverage the centralized Log Workspace created during an Enterprise Scale Landing Zone (ESLZ) deployment. Please consider starting with an ESLZ solution and returning to this deployment once complete.",
                                 "uri": "https://github.com/Azure/Enterprise-Scale#deploying-enterprise-scale-architecture-in-your-own-environment",
                                 "style": "Warning"
                             }
