@@ -170,31 +170,10 @@
                             "visible": true
                         },
                         {
-                            "name": "createAAdDs",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "AADDS",
-                            "defaultValue": "New",
-                            "toolTip": "A new AADDS instance will be provisioned in this subscription if none currently exists otherwise you may select an existing implementation.",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "New",
-                                        "value": true
-                                    },
-                                    {
-                                        "label": "Existing",
-                                        "value": false
-                                    }
-                                ]
-                            },
-                            "visible": "[equals(steps('avdComponentsSection').avdIdentityOption, false)]"
-                        },
-                        {
                             "name": "aaddsSelector",
                             "type": "Microsoft.Solutions.ResourceSelector",
                             "label": "Existing AADDS Instance",
-                            "visible": "[equals(steps('avdComponentsSection').createAAdDs, false)]",
+                            "visible": "[equals(steps('avdComponentsSection').avdIdentityOption, false)]",
                             "resourceType": "Microsoft.AAD/domainServices",
                             "options": {
                                 "filter": {
