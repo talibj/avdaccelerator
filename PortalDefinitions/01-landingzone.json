@@ -872,7 +872,7 @@
                                     "toolTip": "Choose which USB device or class ID's should be redirected.",
                                     "placeholder": "Example: 52ae366d-f376-4c62-a2d9-e0fce0cc2a18\\;6aea2da3-17cb-4cd7-9977-47c9cae404ab",
                                     "multiLine": true,
-                                    "visible": "[equals(steps('hostPoolOptions').deviceRedirection.hpusbdevicestoredirect, 'usbInstanceIds')]",
+                                    "visible": "[equals(steps('hostPoolOptions').deviceRedirection.usbdevicestoredirect, 'usbInstanceIds')]",
                                     "constraints": {
                                         "required": false,
                                         "validations": []
@@ -1163,7 +1163,11 @@
                                     {
                                         "label": "Existing (Recommended)",
                                         "value": false
-                                    }
+                                    },
+                                    {
+                                        "label": "Deployed with Azure Policy",
+                                        "value": "logPolicyDeploy"
+                                    }                                    
                                 ]
                             },
                             "visible": true
