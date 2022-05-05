@@ -254,7 +254,7 @@ module avdServiceObjectsRg '../carml/1.0.0/Microsoft.Resources/resourceGroups/de
     scope: subscription(avdWorkloadSubsId)
     name: 'AVD-RG-ServiceObjects-${time}'
     params: {
-        name: avdServiceObjectsRgName
+        name: 'test123456789'
         location: avdManagementPlaneLocation
     }
 }
