@@ -8,7 +8,7 @@ targetScope = 'subscription'
 @description('Required. The name of the resource group to deploy')
 param deploymentPrefix string = ''
 
-@description('Required. Location where to deploy compute services')
+@description('Required. Location where to deploy compute 23 services')
 param avdSharedServicesLocation string = ''
 
 @description('Optional. AVD shared services subscription ID, multiple subscriptions scenario')
