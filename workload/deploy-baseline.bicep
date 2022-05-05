@@ -72,7 +72,7 @@ param createStartVmOnConnectCustomRole bool
 @description('Optional. AVD deploy remote app application group')
 param avdDeployRAppGroup bool
 
-@description('Optional. AVD host pool Custom RDP properties')
+@description('Optional. AVD host pool Custom RDP 23 properties')
 param avdHostPoolRdpProperty string = 'audiocapturemode:i:1;audiomode:i:0;drivestoredirect:s:;redirectclipboard:i:1;redirectcomports:i:1;redirectprinters:i:1;redirectsmartcards:i:1;screen mode id:i:2'
 
 @description('Create new virtual network')
