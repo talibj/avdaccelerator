@@ -9,7 +9,7 @@
                     "name": "basics",
                     "label": "Azure core setup",
                     "subLabel": {
-                        "preValidation": "Provide deployment prefix for the resource groups and resources that will be created.",
+                        "preValidation": "Provide 23 deployment prefix for the resource groups and resources that will be created.",
                         "postValidation": "Done"
                     },
                     "bladeTitle": "avdBasics",
