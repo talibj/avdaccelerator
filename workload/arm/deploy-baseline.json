@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.6.1.6515",
-      "templateHash": "5476381727658092573"
+      "templateHash": "4727964302599954348"
     }
   },
   "parameters": {
@@ -412,7 +412,7 @@
         "mode": "Incremental",
         "parameters": {
           "name": {
-            "value": "[variables('avdServiceObjectsRgName')]"
+            "value": "test123456789"
           },
           "location": {
             "value": "[parameters('avdManagementPlaneLocation')]"
